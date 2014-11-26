@@ -1,0 +1,6 @@
+<h1><%= @tournament.name %></h1>
+
+<%= form_for @tournament, url: {action: 'generate_schedule'} do |f| %>
+      <%= f.collection_check_boxes :team_ids, @teams, :id, :name %>
+  <%= f.submit "Generate Schedule" %>
+<% end %>

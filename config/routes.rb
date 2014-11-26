@@ -7,6 +7,9 @@ Rails.application.routes.draw do
 
   resources :activities, :tournaments, :teams
 
+  get 'tournaments/:id/add_teams', to: 'tournaments#add_teams', as: 'add_teams'
+  patch 'tournaments/:id/generate_schedule', to: 'tournaments#generate_schedule', as: 'generate_schedule'
+
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'
 

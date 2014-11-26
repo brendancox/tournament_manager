@@ -7,6 +7,12 @@ class TournamentsController < ApplicationController
 
   def create
   	tournament = Tournament.create(tournament_params)
+  	redirect_to add_teams_path(tournament)
+  end
+
+  def update
+  	tournament = Tournament.find(params[:id])
+  	tournament.update(add_team_params)
   	redirect_to tournament
   end
 
@@ -18,10 +24,25 @@ class TournamentsController < ApplicationController
   	@tournaments = Tournament.all
   end
 
+  def add_teams
+  	@tournament = Tournament.find(params[:id])
+  	@teams = Team.all
+  end
+
+  def generate_schedule
+  	tournament = Tournament.find(params[:id])
+  	tournament.update(add_team_params)
+  	redirect_to tournament
+  end
+
   private
 
   def tournament_params
   	params.require(:tournament).permit(:name, :activity_id, :num_of_teams)
+  end
+
+  def add_team_params
+  	params.require(:tournament).permit(:id, team_ids: [])
   end
 
 end
