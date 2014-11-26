@@ -1,0 +1,4 @@
+<h1>All Tournaments</h1>
+<% @tournaments.each do |tournament| %>
+  <%= link_to tournament.name, tournament %><br>
+<% end %>
