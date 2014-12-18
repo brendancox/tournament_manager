@@ -30,8 +30,9 @@ class TournamentsController < ApplicationController
   end
 
   def generate_schedule
-  	tournament = Tournament.find(params[:id])
-  	tournament.update(add_team_params)
+  	tournament = Tournament.update(params[:id], add_team_params)
+    schedule = GenerateSchedule.new(tournament)
+    schedule.create
   	redirect_to tournament
   end
 
