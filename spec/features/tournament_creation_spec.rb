@@ -1,22 +1,37 @@
 require 'rails_helper'
 
-feature "Creating tournaments" do 
+def new_tournament_first_page
+	visit "/tournaments/new"
+	fill_in 'Name', with: "Football Tournament"
+	select 'Football', from: 'Activity'
+	click_button "Next"
+end
+
+def new_tournament_second_page
+	check('Alpha')
+	check('Beta')
+	check('Gamma')
+	check('Delta')
+	click_button "Generate Schedule"
+end
+
+describe "Creating tournaments" do 
 	before :each do 
-		create(:activity)
-		create(:team)
-		create(:beta)
-		create(:gamma)
-		create(:delta)
+		load_factories
 	end
 
-	scenario "Generate basic tournament" do
-		visit "/tournaments/new"
+	context "Generate basic tournament" do
+		it "Arrives at add teams page" do
+			new_tournament_first_page
+			expect(page).to have_text('Add teams')
+		end
 
-		fill_in 'Name', with: "Football Tournament"
-		select 'Football', from: 'Activity'
-
-		click_button "Next"
-
-		expect(page).to have_text('Add teams')
+		context "add all teams" do
+			it "Arrives at show tournament page" do
+				new_tournament_first_page
+				new_tournament_second_page
+				expect(page).to have_text('Details')
+			end
+		end
 	end
 end
