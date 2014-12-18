@@ -8,6 +8,6 @@ describe Activity do
 
 	it 'should save standard activity' do
 		activity = Activity.create(name: 'football')
-		expect(Activity.where(name: 'football')).to be_truthy
+		expect(Activity.where(name: 'football')).to exist
 	end
 end

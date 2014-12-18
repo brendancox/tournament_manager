@@ -11,8 +11,8 @@ describe Tournament do
 		expect(tournament).not_to be_valid
 	end
 
-	it 'should save standard activity' do
+	it 'should save standard tournament' do
 		tournament = Tournament.create(name: 'local football', activity_id: 1)
-		expect(Tournament.where(name: 'local football')).to be_truthy
+		expect(Tournament.where(name: 'local football')).to exist
 	end
 end

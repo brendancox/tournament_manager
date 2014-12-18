@@ -6,8 +6,8 @@ describe Team do
 		expect(team).not_to be_valid
 	end
 
-	it 'should save standard activity' do
+	it 'should save standard team' do
 		team = Team.create(name: 'alpha')
-		expect(Team.where(name: 'alpha')).to be_truthy
+		expect(Team.where(name: 'alpha')).to exist
 	end
 end
