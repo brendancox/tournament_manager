@@ -1,11 +1,11 @@
 <h1>Create Tournament</h1>
 
 <%= form_for @tournament do |f| %>
-  <%= f.label "Name" %>
+  <%= f.label :name, "Name" %>
   <%= f.text_field :name %><br>
 
-  <%= f.label "Activity" %>
+  <%= f.label :activity_id, "Activity" %>
   <%= f.select :activity_id, @activity_select_options %><br>
 
-  <%= f.submit "Create Tournament" %>
+  <%= f.submit "Next" %>
 <% end %>
