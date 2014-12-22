@@ -30,10 +30,14 @@ class GenerateSchedule
     #and 2^(rounds-1) is the number of games in the subround. 
     teams_after_first_round = (@tournament.teams.count / 2).ceil
     teams_in_second_round = 2**(@rounds - 1)
-    num_of_games = teams_after_first_round - teams_in_second_round
+    @games_in_subround = teams_after_first_round - teams_in_second_round
+    if @games_in_subround > 0
+      @rounds += 1
+    end
   end
 
   def generate_first_round_fixtures
+    @current_round = 1
     num_of_games = (@tournament.teams.count / 2).floor
     teams_to_add_to_fixtures = @tournament.teams.all.pluck(:id).shuffle
     for i in  0...num_of_games
@@ -41,12 +45,13 @@ class GenerateSchedule
       new_fixture.player1_id = teams_to_add_to_fixtures[2*i]
       new_fixture.player2_id = teams_to_add_to_fixtures[2*i+1]
       new_fixture.completed = false #should this be added to fixtures model (before save, if blank)
-      #will add a column 'playoff_round', which is an integer
+      new_fixture.playoff_round = 1
       #current_stage column was meant to be for final, semifinal etc. will add this later
-      #will need to set date and time, so will need to add column 'start_time'
       #would add next_playoff_id when generating second round
+      new_fixture.start_time = Time.new.change(hour: 18) + (1 + i).day
       new_fixture.save
     end
+    @current_round += 1
   end
 
 end
