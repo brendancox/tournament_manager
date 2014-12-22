@@ -18,4 +18,19 @@ describe "generate schedules" do
 	it "determines number of rounds" do
 		expect(subject.determine_rounds).to eq(2)
 	end
+
+	it "determines number of games in subround" do
+		subject.determine_rounds
+		expect(subject.games_in_subround).to eq(0)
+	end
+
+	it "creates fixtures for first round" do
+		subject.determine_rounds
+		subject.generate_first_round_fixtures
+		expect(Fixture.count).to eq(2)
+	end
+
+	it "creates fixtures for second round" do
+		pending
+	end
 end
