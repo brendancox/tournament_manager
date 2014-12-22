@@ -44,9 +44,30 @@ describe "generate schedules" do
 			expect(Fixture.first.completed).to eq(false)
 		end
 
+		it "should set first fixture for tomorrow 6pm" do
+			tomorrow_at_six = Time.new.change(hour: 18) + 1.day
+			expect(Fixture.first.start_time).to eq(tomorrow_at_six)
+		end
+
+		it "should set second fixture for 24 hours later" do 
+			day_after_at_six = Time.new.change(hour: 18) + 2.day
+			expect(Fixture.second.start_time).to eq(day_after_at_six)
+		end
+
+		it "should add playoff round number to fixtures" do
+			expect(Fixture.first.playoff_round).to eq(1)
+		end
+
 	end
 
-	it "creates fixtures for second round" do
-		pending
+	context "second round fixtures" do
+		before do 
+			subject.determine_rounds
+			subject.generate_first_round_fixtures
+		end
+
+		it "created" do
+			expect(Fixture.last.playoff_round).to eq(2)
+		end
 	end
 end
