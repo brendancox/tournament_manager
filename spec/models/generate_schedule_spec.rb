@@ -25,6 +25,10 @@ describe "generate schedules" do
 		expect(subject.games_in_subround).to eq(0)
 	end
 
+	it "runs the create method without errors" do
+		expect {subject.create}.not_to raise_error
+	end
+
 	context "first round fixtures" do
 		before do 
 			subject.determine_rounds
@@ -70,6 +74,10 @@ describe "generate schedules" do
 
 		it "created" do
 			expect(Fixture.last.playoff_round).to eq(2)
+		end
+
+		it "first round fixtures now show next_playoff_id" do
+			expect(Fixture.first.next_playoff_id).to eq(Fixture.last.id)
 		end
 	end
 end
