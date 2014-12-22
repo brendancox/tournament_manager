@@ -9,10 +9,10 @@ class GenerateSchedule
 
     determine_rounds
     generate_first_round_fixtures
-    num_of_games_in_subround = games_in_subround
+    games_in_subround
     #create fixtures for first round. if odd num of teams, save team id in odd_number_var
     #calc num of games in subround. check odd_number_var. create fixtures for subround, if any. 
-    #create fixtures for remaining rounds. 
+    generate_remaining_fixtures 
   end
 
   def determine_rounds
@@ -34,6 +34,7 @@ class GenerateSchedule
     if @games_in_subround > 0
       @rounds += 1
     end
+    @games_in_subround
   end
 
   def generate_first_round_fixtures
@@ -54,4 +55,17 @@ class GenerateSchedule
     @current_round += 1
   end
 
+  def generate_remaining_fixtures
+    num_of_games = 2**(@rounds - @current_round)
+    preceding_round_fixtures = @tournament.fixtures.where(playoff_round: @current_round -1).pluck(:id)
+    last_round_final_start_time = @tournament.fixtures.last.start_time
+    for i in 0...num_of_games
+      new_fixture = @tournament.fixtures.new
+      new_fixture.completed = false
+      new_fixture.playoff_round = @current_round
+      new_fixture.start_time = last_round_final_start_time + (1 + i).day
+      new_fixture.save
+      
+    end
+  end
 end

@@ -22,7 +22,7 @@ describe "generate schedules" do
 	it "determines number of games in subround" do
 		subject.determine_rounds
 		subject.games_in_subround
-		expect(@games_in_subround).to eq(0)
+		expect(subject.games_in_subround).to eq(0)
 	end
 
 	context "first round fixtures" do
@@ -65,6 +65,7 @@ describe "generate schedules" do
 		before do 
 			subject.determine_rounds
 			subject.generate_first_round_fixtures
+			subject.generate_remaining_fixtures
 		end
 
 		it "created" do
