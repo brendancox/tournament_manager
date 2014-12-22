@@ -24,10 +24,26 @@ describe "generate schedules" do
 		expect(subject.games_in_subround).to eq(0)
 	end
 
-	it "creates fixtures for first round" do
-		subject.determine_rounds
-		subject.generate_first_round_fixtures
-		expect(Fixture.count).to eq(2)
+	context "first round fixtures" do
+		before do 
+			subject.determine_rounds
+			subject.generate_first_round_fixtures
+		end
+
+		it "created" do
+			expect(Fixture.count).to eq(2)
+		end
+
+		it "should assign one team to one fixture" do
+			teams_array = [Fixture.first.player1_id, Fixture.first.player2_id, \
+				Fixture.last.player1_id, Fixture.last.player2_id]
+			expect(teams_array.uniq.length).to eq(teams_array.length)
+		end
+
+		it "completed should be set to false" do
+			expect(Fixture.first.completed).to eq(false)
+		end
+
 	end
 
 	it "creates fixtures for second round" do
