@@ -5,13 +5,11 @@ class GenerateSchedule
   end
 
   def create
-  	#check for existing fixtures for this tournament
-
+  	#TO ADD: check for existing fixtures for this tournament
     determine_rounds
     generate_first_round_fixtures
-    games_in_subround
-    #create fixtures for first round. if odd num of teams, save team id in odd_number_var
-    #calc num of games in subround. check odd_number_var. create fixtures for subround, if any. 
+    #calc num of games in subround. check odd_number_var. create fixtures for subround, if any.
+    generate_subround_fixtures
     generate_remaining_fixtures
   end
 
@@ -30,11 +28,7 @@ class GenerateSchedule
     #and 2^(rounds-1) is the number of games in the subround. 
     teams_after_first_round = (@tournament.teams.count / 2).ceil
     teams_in_second_round = 2**(@rounds - 1)
-    @games_in_subround = teams_after_first_round - teams_in_second_round
-    if @games_in_subround > 0
-      @rounds += 1
-    end
-    @games_in_subround
+    num_of_games_in_subround = teams_after_first_round - teams_in_second_round
   end
 
   def generate_first_round_fixtures
@@ -51,6 +45,10 @@ class GenerateSchedule
       #would add next_playoff_id when generating second round
       new_fixture.start_time = Time.new.change(hour: 18) + (1 + i).day
       new_fixture.save
+    end
+    #save id of team not playing if there is an odd number
+    if teams_to_add_to_fixtures.length.odd?
+      @odd_team_num = teams_to_add_to_fixtures.last
     end
     @current_round += 1
   end
@@ -74,5 +72,12 @@ class GenerateSchedule
       preceding_fixture2.next_playoff_id = new_fixture.id
       preceding_fixture2.save
     end
+  end
+
+  def generate_subround_fixtures
+    if games_in_subround > 0
+      @rounds += 1
+    end
+
   end
 end

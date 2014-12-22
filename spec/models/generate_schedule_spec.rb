@@ -40,7 +40,7 @@ describe "generate schedules" do
 		end
 
 		it "should assign one team to one fixture" do
-			teams_array = [Fixture.first.player1_id, Fixture.first.player2_id, \
+			teams_array = [Fixture.first.player1_id, Fixture.first.player2_id,
 				Fixture.last.player1_id, Fixture.last.player2_id]
 			expect(teams_array.uniq.length).to eq(teams_array.length)
 		end
@@ -78,6 +78,32 @@ describe "generate schedules" do
 
 		it "first round fixtures now show next_playoff_id" do
 			expect(Fixture.first.next_playoff_id).to eq(Fixture.last.id)
+		end
+	end
+
+	context "subround functions" do
+		before do
+			3.times {create(:extra_teams)}
+			subject.determine_rounds
+			subject.generate_first_round_fixtures
+			subject.generate_subround_fixtures
+		end
+
+		it "creates subround fixtures" do
+			expect(Fixture.where(playoff_round: 2).count).to eq(3)
+		end
+
+		it "first subround game includes odd team" do
+			first_round_teams = Array.new
+			for x in 0...Fixture.where(playoff_round: 1).count
+				first_round_teams.push(Fixture[x].player1_id)
+				first_round_teams.push(Fixture[x].player2_id)
+			end
+			expect(first_round_teams.include? Fixture.where(playoff_round: 2).id).to eq(true)
+		end
+
+		it "creates 3rd round with 2^x games" do 
+			pending
 		end
 	end
 end

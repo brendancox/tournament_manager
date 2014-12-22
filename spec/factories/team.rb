@@ -13,5 +13,9 @@ FactoryGirl.define do
 		factory :delta do
 			name "Delta"
 		end
+
+		factory :extra_teams do
+			sequence(:name) {|n| "extra#{n}"}
+		end
 	end
 end
