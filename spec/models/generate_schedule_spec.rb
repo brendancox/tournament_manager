@@ -84,26 +84,36 @@ describe "generate schedules" do
 	context "subround functions" do
 		before do
 			3.times {create(:extra_teams)}
+			tournament = Tournament.first
+			tournament.update(team_ids: [1, 2, 3, 4, 5, 6, 7])
 			subject.determine_rounds
+			puts subject.games_in_subround
 			subject.generate_first_round_fixtures
 			subject.generate_subround_fixtures
+		end
+
+		it "determines 3 subround fixtures" do
+			expect(subject.games_in_subround).to eq(3)
 		end
 
 		it "creates subround fixtures" do
 			expect(Fixture.where(playoff_round: 2).count).to eq(3)
 		end
 
-		it "first subround game includes odd team" do
+		it "odd team in first subround game was not in previous games" do
 			first_round_teams = Array.new
-			for x in 0...Fixture.where(playoff_round: 1).count
-				first_round_teams.push(Fixture[x].player1_id)
-				first_round_teams.push(Fixture[x].player2_id)
+			@round_1 = Fixture.where(playoff_round: 1)
+			for x in 0...@round_1.count
+				first_round_teams.push(@round_1[x].player1_id)
+				first_round_teams.push(@round_1[x].player2_id)
 			end
-			expect(first_round_teams.include? Fixture.where(playoff_round: 2).id).to eq(true)
+			expect(first_round_teams.include? Fixture.where(playoff_round: 2).first.id).not_to eq(true)
 		end
 
-		it "creates 3rd round with 2^x games" do 
-			pending
+		it "creates 3rd round with 2^x games" do
+			#should change this work out remainingn rounds, then will check that number of 
+			#games in this round equals 2^remainging_rounds
+			expect(Fixture.where(playoff_round: 3).count * 2).to eq(2)
 		end
 	end
 end
