@@ -109,17 +109,14 @@ class GenerateSchedule
       end
       teams_in_following_round = 2**(@rounds - 2) #minus 2 here since @rounds gained +1 earlier
       num_of_teams_straight_to_third_round = teams_in_following_round - num_of_games
-      if @odd_team_num
-        num_of_teams_straight_to_third_round += 1
-      end
       @straight_to_third_round = preceding_round_fixtures.last(num_of_teams_straight_to_third_round)
       @current_round += 1
     end
   end
 
   def generate_fixtures_following_subround
-    if games_in_subround > 0
-      num_of_games = 2**(@rounds - 2) #see note for teams_in_following_round
+    if @tournament.fixtures.where(playoff_round: 2).count > 0
+      num_of_games = 2**(@rounds - 2) / 2#see note for teams_in_following_round
       preceding_round_fixtures = @tournament.fixtures.where(playoff_round: 2).pluck(:id)
       last_round_final_start_time = @tournament.fixtures.last.start_time
       for i in 0...num_of_games
@@ -141,6 +138,7 @@ class GenerateSchedule
           preceding_fixture2.next_playoff_id = new_fixture.id
           preceding_fixture2.save
         end
+        new_fixture.save
       end
       @current_round += 1
     end

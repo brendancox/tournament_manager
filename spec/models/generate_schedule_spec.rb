@@ -114,9 +114,8 @@ describe "generate schedules" do
 			end
 
 			it "creates 3rd round with 2^x games" do
-				#should change this work out remainingn rounds, then will check that number of 
-				#games in this round equals 2^remainging_rounds
-				expect(Fixture.where(playoff_round: 3).count * 2).to eq(2)
+				subject.generate_fixtures_following_subround
+				expect(Fixture.where(playoff_round: 3).count).to eq(1)
 			end
 		end
 	end
