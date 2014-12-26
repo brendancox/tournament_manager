@@ -28,8 +28,8 @@ class GenerateSchedule
 
   def games_in_subround
     #divide num of teams by 2, difference between ceiling of that (rounding up to allow for odd number)
-    #and 2^(rounds-1) is the number of games in the subround. 
-    teams_after_first_round = (@tournament.teams.count / 2).ceil
+    #and 2^(rounds-1) is the number of games in the subround.
+    teams_after_first_round = (@tournament.teams.count.to_f / 2).ceil
     teams_in_following_round = 2**(@rounds - 1)
     num_of_games_in_subround = teams_after_first_round - teams_in_following_round
   end
@@ -97,9 +97,15 @@ class GenerateSchedule
           preceding_fixture1.next_playoff_id = new_fixture.id
           preceding_fixture1.save
         end
-        preceding_fixture2 = @tournament.fixtures.find(preceding_round_fixtures[2*i+1])
-        preceding_fixture2.next_playoff_id = new_fixture.id
-        preceding_fixture2.save
+        if (i == num_of_games - 1) && (@odd_team_num)
+          preceding_fixture2 = @tournament.fixtures.find(preceding_round_fixtures[0])
+          preceding_fixture2.next_playoff_id = new_fixture.id
+          preceding_fixture2.save
+        else
+          preceding_fixture2 = @tournament.fixtures.find(preceding_round_fixtures[2*i+1])
+          preceding_fixture2.next_playoff_id = new_fixture.id
+          preceding_fixture2.save
+        end
       end
       teams_in_following_round = 2**(@rounds - 2) #minus 2 here since @rounds gained +1 earlier
       num_of_teams_straight_to_third_round = teams_in_following_round - num_of_games
