@@ -18,6 +18,7 @@ class TournamentsController < ApplicationController
 
   def show
   	@tournament = Tournament.find(params[:id])
+    @fixtures = FixturesSet.new(@tournament)
   end
 
   def index

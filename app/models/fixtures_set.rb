@@ -1,0 +1,40 @@
+class FixturesSet
+
+	def initialize(tournament)
+		@tournament = tournament
+		@fixtures = Array.new
+		add_fixtures_data
+	end
+
+	def all
+		@fixtures
+	end
+
+	def add_fixtures_data
+		@tournament.fixtures.each_with_index do |fixture, index|
+			@fixtures[index] = Hash.new
+			@fixtures[index][:game_number] = fixture.game_number
+			add_fixture_time(fixture, index)
+			add_team_data(fixture, index)
+		end
+	end
+
+	def add_fixture_time(fixture, index)
+		# IMPORTANT: to keep in mind that localtime will show time based on timezone of the server.
+		# To query users local time from database once devise has been added
+		@fixtures[index][:time] = fixture.start_time.localtime.strftime('%-I:%M%p %A, %d %B %Y')
+	end
+
+	def add_team_data(fixture, index)
+		if fixture.player1_id.blank?
+  		@fixtures[index][:player1] = "Winner of Match #{fixture.preceding_playoff_game_number1}"
+  	else
+  		@fixtures[index][:player1] = @tournament.teams.find(fixture.player1_id).name
+  	end
+		if fixture.player2_id.blank?
+  		@fixtures[index][:player2] = "Winner of Match #{fixture.preceding_playoff_game_number2}"
+  	else
+  		@fixtures[index][:player2] = @tournament.teams.find(fixture.player2_id).name
+  	end
+	end
+end

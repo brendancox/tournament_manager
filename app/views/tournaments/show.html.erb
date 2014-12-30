@@ -5,25 +5,10 @@
 
 <h2>Upcoming Matches</h2>
 
-<% @tournament.fixtures.each do |fixture| %>
-	
-	<p>Game <%= fixture.game_number %></p>
+<% @fixtures.all.each do |fixture| %>
 
-	<p><%= fixture.start_time.localtime.strftime('%-I:%M%p %A, %d %B %Y') 
-	# IMPORTANT: to keep in mind that localtime will show time based on timezone of the server
-  %></p>
-  <p>
-  	<% if fixture.player1_id.blank? %>
-  		Winner of Match <%= fixture.preceding_playoff_game_number1 %>
-  	<% else %>
-  		<%= @tournament.teams.find(fixture.player1_id).name %>
-  	<% end %>
-  	 vs. 
-  	<% if fixture.player2_id.blank? %>
-  		Winner of Match <%= fixture.preceding_playoff_game_number2 %>
-  	<% else %>
-  		<%= @tournament.teams.find(fixture.player2_id).name %>
-  	<% end %>
-  </p>
+	<p>Match <%= fixture[:game_number] %></p>
+	<p><%= fixture[:time] %></p>
+  <p><%= fixture[:player1] %> vs.	<%= fixture[:player2] %></p>
 
 <% end %>
