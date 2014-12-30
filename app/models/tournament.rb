@@ -6,4 +6,5 @@ class Tournament < ActiveRecord::Base
   accepts_nested_attributes_for :participants
   validates :name, presence: true
   validates :activity_id, presence: true
+  belongs_to :activity
 end

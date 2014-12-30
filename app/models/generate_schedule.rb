@@ -8,8 +8,8 @@ class GenerateSchedule
   	#TO ADD: check for existing fixtures for this tournament
 
     determine_rounds
+    @game_number = 1
     generate_first_round_fixtures
-
     #calc num of games in subround. check odd_number_var. create fixtures for subround, if any.
     generate_subround_fixtures
     generate_fixtures_following_subround
@@ -67,8 +67,8 @@ class GenerateSchedule
       new_fixture = generate_new_fixture(first_game_start_time, i)
       new_fixture.save
       #set fixtures from preceding round to be playoff for new fixture
-      update_preceding_with_next_playoff_id(preceding_round_fixtures[2*i], new_fixture.id)
-      update_preceding_with_next_playoff_id(preceding_round_fixtures[2*i+1], new_fixture.id)
+      update_preceding_with_next_playoff_id(preceding_round_fixtures[2*i], new_fixture, 1)
+      update_preceding_with_next_playoff_id(preceding_round_fixtures[2*i+1], new_fixture, 2)
     end
     @current_round += 1
   end
@@ -86,12 +86,12 @@ class GenerateSchedule
         end
         new_fixture.save
         unless (i == 0) && (@odd_team_num)
-          update_preceding_with_next_playoff_id(preceding_round_fixtures[2*i], new_fixture.id)
+          update_preceding_with_next_playoff_id(preceding_round_fixtures[2*i], new_fixture, 1)
         end
         if (i == num_of_games - 1) && (@odd_team_num)
-          update_preceding_with_next_playoff_id(preceding_round_fixtures[0], new_fixture.id)
+          update_preceding_with_next_playoff_id(preceding_round_fixtures[0], new_fixture, 2)
         else
-          update_preceding_with_next_playoff_id(preceding_round_fixtures[2*i+1], new_fixture.id)
+          update_preceding_with_next_playoff_id(preceding_round_fixtures[2*i+1], new_fixture, 2)
         end
       end
       teams_in_following_round = 2**(@rounds - 2) #minus 2 here since @rounds gained +1 earlier
@@ -112,13 +112,13 @@ class GenerateSchedule
         if 2*i < @straight_to_third_round.count
           new_fixture.player1_id = @straight_to_third_round[2*i]
         else
-          update_preceding_with_next_playoff_id(preceding_round_fixtures[preceding_round_count], new_fixture.id)
+          update_preceding_with_next_playoff_id(preceding_round_fixtures[preceding_round_count], new_fixture, 1)
           preceding_round_count += 1
         end
         if 2*i+1 < @straight_to_third_round.count
           new_fixture.player2_id = @straight_to_third_round[2*i+1]
         else
-          update_preceding_with_next_playoff_id(preceding_round_fixtures[preceding_round_count], new_fixture.id)
+          update_preceding_with_next_playoff_id(preceding_round_fixtures[preceding_round_count], new_fixture, 2)
           preceding_round_count += 1
         end
         new_fixture.save
@@ -132,13 +132,21 @@ class GenerateSchedule
     new_fixture.completed = false #should this be added to fixtures model (before save, if blank)
     new_fixture.start_time = first_game_start_time + game_number.day
     new_fixture.playoff_round = @current_round
+    new_fixture.game_number = @game_number
+    @game_number += 1
     #current_stage column was meant to be for final, semifinal etc. will add this later
     new_fixture
   end
 
-  def update_preceding_with_next_playoff_id(preceding_id, next_id)
+  def update_preceding_with_next_playoff_id(preceding_id, next_playoff, one_or_two)
     preceding_fixture = @tournament.fixtures.find(preceding_id)
-    preceding_fixture.next_playoff_id = next_id
+    preceding_fixture.next_playoff_id = next_playoff.id
     preceding_fixture.save
+    if one_or_two == 1
+      next_playoff.preceding_playoff_game_number1 = preceding_fixture.game_number
+    else
+      next_playoff.preceding_playoff_game_number2 = preceding_fixture.game_number
+    end
+    next_playoff.save
   end
 end

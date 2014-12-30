@@ -27,10 +27,13 @@ describe "Creating tournaments" do
 		end
 
 		context "add all teams" do
-			it "Arrives at show tournament page" do
+			before do 
 				new_tournament_first_page
 				new_tournament_second_page
-				expect(page).to have_text('Details')
+			end
+
+			it "Arrives at show tournament page" do
+				expect(page).to have_text('Football Tournament')
 			end
 		end
 	end

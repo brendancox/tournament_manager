@@ -1,6 +1,6 @@
 FactoryGirl.define do
 	factory :tournament do
-		name 'Rugby Tournament'
+		name 'Soccer Tournament'
 		activity_id 1
 	end
 end
