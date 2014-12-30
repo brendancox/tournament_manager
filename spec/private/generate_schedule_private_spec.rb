@@ -1,5 +1,13 @@
 require 'rails_helper'
 
+# Private specs are ignored by default. See rails_helper for command excluding tests in this folder.
+
+# These tests are kept as complicated code may need to be refactored from time to time, with
+# benefit of testing existing methods as a starting point. 
+
+# Relevant models will need private commented out. Alternatively, rspec-context-private gem 
+# could be added to bundle. 
+
 describe "generate playoff schedules" do
 	before :each do 
 		load_factories
