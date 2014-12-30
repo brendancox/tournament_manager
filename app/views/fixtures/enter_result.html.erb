@@ -1,0 +1,11 @@
+<h1><%= @fixture[:player1] %> vs.	<%= @fixture[:player2] %></h1>
+<p>Start time: <%= @fixture[:time] %></p>
+<p>Match <%= @fixture[:game_number] %> of <%= @tournament.name %></p>
+
+<%= form_for @fixture_record, url: {action: 'record_result'} do |f| %>
+	<%= f.label :player1_score, 'Score for ' + @fixture[:player1] %>
+	<%= f.number_field :player1_score %><br>
+	<%= f.label :player2_score, 'Score for ' + @fixture[:player2] %>
+	<%= f.number_field :player2_score %><br>
+	<%= f.submit 'Add Result' %>
+<% end %>
