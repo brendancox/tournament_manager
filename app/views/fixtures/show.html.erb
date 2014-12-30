@@ -1,3 +1,14 @@
 <h1><%= @fixture[:player1] %> vs.	<%= @fixture[:player2] %></h1>
 <p>Start time: <%= @fixture[:time] %></p>
 <p>Match <%= @fixture[:game_number] %> of <%= @tournament.name %></p>
+
+<% if @fixture[:completed] %>
+	<p>Final score: </p>
+	<p><%= @fixture[:player1] %> <%= @fixture[:player1_score] %> -
+		<%= @fixture[:player2_score] %> <%= @fixture[:player2] %></p>
+	<% if @fixture[:draw] %>
+		<p>The match ended in a draw.</p>
+	<% else %>
+		<p><%= @fixture[:winner] %> won.</p>
+	<% end %>
+<% end %>

@@ -16,11 +16,35 @@ class FixturesSet
 		@fixtures
 	end
 
+	def completed
+		completed_fixtures = Array.new
+		@fixtures.each do |fixture|
+			if fixture[:completed]
+				completed_fixtures.push(fixture)
+			end
+		end
+		completed_fixtures
+	end
+
+	def unplayed
+		unplayed_fixtures = Array.new
+		@fixtures.each do |fixture|
+			unless fixture[:completed]
+				unplayed_fixtures.push(fixture)
+			end
+		end
+		unplayed_fixtures
+	end
+
 	def add_fixtures_data(fixture, index=0)
 		@fixtures[index] = Hash.new
+		@fixtures[index][:id] = fixture.id
 		@fixtures[index][:game_number] = fixture.game_number
 		add_fixture_time(fixture, index)
 		add_team_data(fixture, index)
+		if @fixtures[index][:completed] = fixture.completed
+			add_final_score_data(fixture, index)
+		end
 	end
 
 	def add_fixture_time(fixture, index)
@@ -40,5 +64,17 @@ class FixturesSet
   	else
   		@fixtures[index][:player2] = @tournament.teams.find(fixture.player2_id).name
   	end
+	end
+
+	def add_final_score_data(fixture, index)
+		@fixtures[index][:player1_score] = fixture.player1_score
+		@fixtures[index][:player2_score] = fixture.player2_score
+		if @fixtures[index][:player1_score] > @fixtures[index][:player2_score]
+			@fixtures[index][:winner] = @fixtures[index][:player1]
+		elsif @fixtures[index][:player1_score] < @fixtures[index][:player2_score]
+			@fixtures[index][:winner] = @fixtures[index][:player2]
+		else 
+			@fixtures[index][:draw]
+		end
 	end
 end
