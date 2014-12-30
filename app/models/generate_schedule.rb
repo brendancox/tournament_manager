@@ -11,9 +11,10 @@ class GenerateSchedule
     #calc num of games in subround. check odd_number_var. create fixtures for subround, if any.
     generate_subround_fixtures
     generate_fixtures_following_subround
-    #to add while loop for while @current_round is less than or equal to @rounds
-    generate_remaining_fixtures
-    #add @current_rounds += 1 at end of while loop
+    while @current_round <= @rounds
+      generate_remaining_fixtures
+    end
+
   end
 
   def determine_rounds
@@ -75,6 +76,7 @@ class GenerateSchedule
       preceding_fixture2.next_playoff_id = new_fixture.id
       preceding_fixture2.save
     end
+    @current_round += 1
   end
 
   def generate_subround_fixtures
@@ -119,6 +121,7 @@ class GenerateSchedule
       num_of_games = 2**(@rounds - 2) / 2#see note for teams_in_following_round
       preceding_round_fixtures = @tournament.fixtures.where(playoff_round: 2).pluck(:id)
       last_round_final_start_time = @tournament.fixtures.last.start_time
+      preceding_round_count = 0
       for i in 0...num_of_games
         new_fixture = @tournament.fixtures.new
         new_fixture.completed = false
@@ -127,14 +130,16 @@ class GenerateSchedule
         if 2*i < @straight_to_third_round.count
           new_fixture.player1_id = @straight_to_third_round[2*i]
         else
-          preceding_fixture1 = @tournament.fixtures.find(preceding_round_fixtures[2*i])
+          preceding_fixture1 = @tournament.fixtures.find(preceding_round_fixtures[preceding_round_count])
+          preceding_round_count += 1
           preceding_fixture1.next_playoff_id = new_fixture.id
           preceding_fixture1.save
         end
         if 2*i+1 < @straight_to_third_round.count
           new_fixture.player2_id = @straight_to_third_round[2*i+1]
         else
-          preceding_fixture2 = @tournament.fixtures.find(preceding_round_fixtures[2*i+1])
+          preceding_fixture2 = @tournament.fixtures.find(preceding_round_fixtures[preceding_round_count])
+          preceding_round_count += 1
           preceding_fixture2.next_playoff_id = new_fixture.id
           preceding_fixture2.save
         end
