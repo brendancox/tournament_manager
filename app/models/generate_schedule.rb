@@ -137,8 +137,8 @@ class GenerateSchedule
   end
 
   def update_preceding_with_next_playoff_id(preceding_id, next_id)
-      preceding_fixture = @tournament.fixtures.find(preceding_id)
-      preceding_fixture.next_playoff_id = next_id
-      preceding_fixture.save
+    preceding_fixture = @tournament.fixtures.find(preceding_id)
+    preceding_fixture.next_playoff_id = next_id
+    preceding_fixture.save
   end
 end
