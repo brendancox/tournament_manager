@@ -1,22 +1,26 @@
 class FixturesSet
 
-	def initialize(tournament)
+	def initialize(tournament, *fixture)
 		@tournament = tournament
 		@fixtures = Array.new
-		add_fixtures_data
+		if fixture.blank?
+			@tournament.fixtures.each_with_index do |fixture, index|
+				add_fixtures_data(fixture, index)
+			end
+		else
+			add_fixtures_data(fixture[0])
+		end
 	end
 
-	def all
+	def data
 		@fixtures
 	end
 
-	def add_fixtures_data
-		@tournament.fixtures.each_with_index do |fixture, index|
-			@fixtures[index] = Hash.new
-			@fixtures[index][:game_number] = fixture.game_number
-			add_fixture_time(fixture, index)
-			add_team_data(fixture, index)
-		end
+	def add_fixtures_data(fixture, index=0)
+		@fixtures[index] = Hash.new
+		@fixtures[index][:game_number] = fixture.game_number
+		add_fixture_time(fixture, index)
+		add_team_data(fixture, index)
 	end
 
 	def add_fixture_time(fixture, index)

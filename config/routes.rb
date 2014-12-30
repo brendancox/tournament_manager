@@ -5,7 +5,7 @@ Rails.application.routes.draw do
   # You can have the root of your site routed with "root"
   root 'static_pages#home'
 
-  resources :activities, :tournaments, :teams
+  resources :activities, :tournaments, :teams, :fixtures
 
   get 'tournaments/:id/add_teams', to: 'tournaments#add_teams', as: 'add_teams'
   patch 'tournaments/:id/generate_schedule', to: 'tournaments#generate_schedule', as: 'generate_schedule'

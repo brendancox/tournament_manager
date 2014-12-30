@@ -5,7 +5,7 @@
 
 <h2>Upcoming Matches</h2>
 
-<% @fixtures.all.each do |fixture| %>
+<% @fixtures.data.each do |fixture| %>
 
 	<p>Match <%= fixture[:game_number] %></p>
 	<p><%= fixture[:time] %></p>
