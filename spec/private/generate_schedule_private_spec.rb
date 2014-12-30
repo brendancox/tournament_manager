@@ -8,7 +8,7 @@ require 'rails_helper'
 # Relevant models will need private commented out. Alternatively, rspec-context-private gem 
 # could be added to bundle. 
 
-describe "generate playoff schedules" do
+describe "generate playoff schedules - private methods", :private => true do
 	before :each do 
 		load_factories
 		tournament = Tournament.first
@@ -16,12 +16,6 @@ describe "generate playoff schedules" do
 	end
 
 	subject { GenerateSchedule.new(Tournament.first) }
-
-	it "check teams added to tournament" do
-		tournament = Tournament.first
-		participant = tournament.teams.first
-		expect(participant.name).to eq('Alpha')
-	end
 
 	it "determines number of rounds" do
 		expect(subject.determine_rounds).to eq(2)
@@ -31,10 +25,6 @@ describe "generate playoff schedules" do
 		subject.determine_rounds
 		subject.games_in_subround
 		expect(subject.games_in_subround).to eq(0)
-	end
-
-	it "runs the create method without errors" do
-		expect {subject.create}.not_to raise_error
 	end
 
 	context "first round fixtures" do
@@ -124,40 +114,6 @@ describe "generate playoff schedules" do
 			it "creates 3rd round with 2^x games" do
 				subject.generate_fixtures_following_subround
 				expect(Fixture.where(playoff_round: 3).count).to eq(1)
-			end
-		end
-	end
-
-	context "full schedule" do
-		before do
-			@num_of_games = load_playoff_numbers
-			@num_of_teams = 17
-			(@num_of_teams - 4).times {create(:extra_teams)}
-			tournament = Tournament.first
-			tournament.update(team_ids: (1..@num_of_teams).to_a)
-			subject.create
-		end
-
-		context "should correct number of games in each round" do
-
-			it "first round" do
-				expect(Fixture.where(playoff_round: 1).count).to eq(@num_of_games[@num_of_teams][1])
-			end
-
-			it "second round" do
-				expect(Fixture.where(playoff_round: 2).count).to eq(@num_of_games[@num_of_teams][2])
-			end
-
-			it "third round" do
-				expect(Fixture.where(playoff_round: 3).count).to eq(@num_of_games[@num_of_teams][3])
-			end
-
-			it "fourth round" do
-				expect(Fixture.where(playoff_round: 4).count).to eq(@num_of_games[@num_of_teams][4])
-			end
-
-			it "fifth round" do
-				expect(Fixture.where(playoff_round: 5).count).to eq(@num_of_games[@num_of_teams][5])
 			end
 		end
 	end

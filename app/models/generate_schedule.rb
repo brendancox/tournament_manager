@@ -19,7 +19,7 @@ class GenerateSchedule
     end
   end
 
-  # private - interferes with testing by naming as private
+  private
 
   def determine_rounds
     #work out number of rounds
