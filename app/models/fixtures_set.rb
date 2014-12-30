@@ -36,6 +36,8 @@ class FixturesSet
 		unplayed_fixtures
 	end
 
+	private
+
 	def add_fixtures_data(fixture, index=0)
 		@fixtures[index] = Hash.new
 		@fixtures[index][:id] = fixture.id
