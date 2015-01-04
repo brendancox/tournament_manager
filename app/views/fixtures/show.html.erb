@@ -11,4 +11,7 @@
 	<% else %>
 		<p><%= @fixture[:winner] %> won.</p>
 	<% end %>
+<% else %>
+	<%= link_to 'Add result for this match', enter_result_path(@fixture[:id]) %>
 <% end %>
+

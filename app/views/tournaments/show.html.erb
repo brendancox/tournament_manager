@@ -3,14 +3,19 @@
 
 <p><%= @tournament.activity.name %></p>
 
-<h2>Upcoming Matches</h2>
+<% if @winner %>
+	<p><%= @winner %> won the tournament.</p>
+<% else %>
 
-<% @fixtures.unplayed.each do |fixture| %>
+	<h2>Upcoming Matches</h2>
 
-	<p><%= link_to "Match #{fixture[:game_number]}", fixture_path(fixture[:id]) %></p>
-	<p><%= fixture[:time] %></p>
-  <p><%= fixture[:player1] %> vs.	<%= fixture[:player2] %></p>
+	<% @fixtures.unplayed.each do |fixture| %>
 
+		<p><%= link_to "Match #{fixture[:game_number]}", fixture_path(fixture[:id]) %></p>
+		<p><%= fixture[:time] %></p>
+	  <p><%= fixture[:player1] %> vs.	<%= fixture[:player2] %></p>
+
+	<% end %>
 <% end %>
 
 <h2>Completed Matches</h2>

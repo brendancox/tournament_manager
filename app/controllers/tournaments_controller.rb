@@ -19,6 +19,9 @@ class TournamentsController < ApplicationController
   def show
   	@tournament = Tournament.find(params[:id])
     @fixtures = FixturesSet.new(@tournament)
+    if @tournament.completed
+      @winner = @tournament.teams.find(@tournament.winner_id).name
+    end
   end
 
   def index
