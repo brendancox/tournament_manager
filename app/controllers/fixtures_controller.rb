@@ -15,7 +15,15 @@ class FixturesController < ApplicationController
 	def record_result
 		fixture = Fixture.update(params[:id], record_result_params)
 		fixture.completed = true
+		if fixture.player1_score > fixture.player2_score
+			fixture.winner_id = fixture.player1_id
+		elsif fixture.player2_score > fixture.player1_score
+			fixture.winner_id = fixture.player2_id
+		end
 		fixture.save
+		tournament = Tournament.find(fixture.tournament_id)
+		update_competition_details = UpdateTournament.new(tournament, fixture)
+		update_competition_details.apply_changes
 		redirect_to fixture
 	end
 
