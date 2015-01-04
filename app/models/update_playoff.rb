@@ -1,4 +1,4 @@
-class UpdateTournament
+class UpdatePlayoff
 
 	def initialize(tournament, fixture)
 		@tournament = tournament

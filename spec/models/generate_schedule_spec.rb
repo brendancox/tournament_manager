@@ -7,7 +7,7 @@ describe "generate playoff schedules" do
 		tournament.update(team_ids: [1, 2, 3, 4])
 	end
 
-	subject { GenerateSchedule.new(Tournament.first) }
+	subject { GeneratePlayoffSchedule.new(Tournament.first) }
 
 	it "runs the create method without errors" do
 		expect {subject.create}.not_to raise_error

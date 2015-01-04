@@ -5,7 +5,7 @@ describe "Fixtures Set" do
 		load_factories
 		tournament = Tournament.first
 		tournament.update(team_ids: [1, 2, 3, 4])
-		schedule = GenerateSchedule.new(tournament)
+		schedule = GeneratePlayoffSchedule.new(tournament)
     schedule.create
 	end
 

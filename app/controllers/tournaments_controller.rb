@@ -35,7 +35,11 @@ class TournamentsController < ApplicationController
 
   def generate_schedule
   	tournament = Tournament.update(params[:id], add_team_params)
-    schedule = GenerateSchedule.new(tournament)
+    if tournament.format == "Playoffs"
+      schedule = GeneratePlayoffSchedule.new(tournament)
+    elsif tournament.format == "League"
+      schedule = GenerateLeagueSchedule.new(tournament)
+    end
     schedule.create
   	redirect_to tournament
   end
@@ -43,7 +47,7 @@ class TournamentsController < ApplicationController
   private
 
   def tournament_params
-  	params.require(:tournament).permit(:name, :activity_id)
+  	params.require(:tournament).permit(:name, :activity_id, :format)
   end
 
   def add_team_params

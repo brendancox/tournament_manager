@@ -6,7 +6,7 @@ describe "update rest of tournament" do
 			load_factories
 			@tournament = Tournament.first
 			@tournament.update(team_ids: [1, 2, 3, 4])
-			schedule = GenerateSchedule.new(@tournament)
+			schedule = GeneratePlayoffSchedule.new(@tournament)
     	schedule.create
 		end
 
@@ -15,7 +15,7 @@ describe "update rest of tournament" do
 			fixture.winner_id = fixture.player1_id
 			fixture.completed = true
 			fixture.save
-			update_competition_details = UpdateTournament.new(@tournament, fixture)
+			update_competition_details = UpdatePlayoff.new(@tournament, fixture)
 			update_competition_details.apply_changes
 			expect(Fixture.last.player1_id).to eq(Fixture.first.winner_id)
 		end
@@ -26,13 +26,13 @@ describe "update rest of tournament" do
 			load_factories
 			@tournament = Tournament.first
 			@tournament.update(team_ids: [1, 2])
-			schedule = GenerateSchedule.new(@tournament)
+			schedule = GeneratePlayoffSchedule.new(@tournament)
     	schedule.create
     	fixture = Fixture.first
 			fixture.winner_id = fixture.player1_id
 			fixture.completed = true
 			fixture.save
-			update_competition_details = UpdateTournament.new(@tournament, fixture)
+			update_competition_details = UpdatePlayoff.new(@tournament, fixture)
 			update_competition_details.apply_changes
 		end
 

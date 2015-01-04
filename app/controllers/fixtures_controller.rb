@@ -22,7 +22,7 @@ class FixturesController < ApplicationController
 		end
 		fixture.save
 		tournament = Tournament.find(fixture.tournament_id)
-		update_competition_details = UpdateTournament.new(tournament, fixture)
+		update_competition_details = UpdatePlayoff.new(tournament, fixture)
 		update_competition_details.apply_changes
 		redirect_to fixture
 	end

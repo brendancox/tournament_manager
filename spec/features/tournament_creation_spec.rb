@@ -4,6 +4,7 @@ def new_tournament_first_page
 	visit "/tournaments/new"
 	fill_in 'Name', with: "Football Tournament"
 	select 'Football', from: 'Activity'
+	select 'Playoffs', from: 'Type'
 	click_button "Next"
 end
 
