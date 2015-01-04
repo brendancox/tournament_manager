@@ -41,7 +41,7 @@ describe "update rest of tournament" do
 		end
 
 		it "records that tournament is complete" do
-			expect(@tournament.winner_id).to be_true
+			expect(@tournament.completed).to eq(true)
 		end
 	end
 end

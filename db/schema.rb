@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141230052804) do
+ActiveRecord::Schema.define(version: 20150104024239) do
 
   create_table "activities", force: true do |t|
     t.string   "name"
@@ -64,6 +64,8 @@ ActiveRecord::Schema.define(version: 20141230052804) do
     t.integer  "num_of_teams"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "winner_id"
+    t.boolean  "completed"
   end
 
 end
