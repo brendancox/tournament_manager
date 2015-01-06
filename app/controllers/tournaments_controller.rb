@@ -39,6 +39,13 @@ class TournamentsController < ApplicationController
       schedule = GeneratePlayoffSchedule.new(tournament)
     elsif tournament.format == "League"
       schedule = GenerateLeagueSchedule.new(tournament)
+      tournament.teams.each do |team|
+        # may want to confirm team does not already have a standing for this competition - if 
+        # this is not checked in model before saving. 
+        standing = tournament.standings.new
+        standing.set_to_zero(team)
+        standing.save
+      end
     end
     schedule.create
   	redirect_to tournament
