@@ -26,7 +26,7 @@ class FixturesController < ApplicationController
 			update_competition_details = UpdatePlayoff.new(tournament, fixture)
 			update_competition_details.apply_changes
 		elsif tournament.type == "League"
-			update_competition_details = UpdateStandings.new(tournament, fixture)
+			update_competition_details = UpdateStanding.new(tournament, fixture)
 			update_competition_details.apply_changes
 		end
 		redirect_to fixture
