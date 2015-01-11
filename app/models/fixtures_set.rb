@@ -76,7 +76,7 @@ class FixturesSet
 		elsif @fixtures[index][:player1_score] < @fixtures[index][:player2_score]
 			@fixtures[index][:winner] = @fixtures[index][:player2]
 		else 
-			@fixtures[index][:draw]
+			@fixtures[index][:draw] = true
 		end
 	end
 end

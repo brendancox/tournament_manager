@@ -19,16 +19,17 @@ class FixturesController < ApplicationController
 			fixture.winner_id = fixture.player1_id
 		elsif fixture.player2_score > fixture.player1_score
 			fixture.winner_id = fixture.player2_id
+		else
+			fixture.winner_id = -1  # winner_id is -1 for a draw
 		end
 		fixture.save
 		tournament = Tournament.find(fixture.tournament_id)
 		if tournament.type == "Playoff"
 			update_competition_details = UpdatePlayoff.new(tournament, fixture)
-			update_competition_details.apply_changes
 		elsif tournament.type == "League"
 			update_competition_details = UpdateStanding.new(tournament, fixture)
-			update_competition_details.apply_changes
 		end
+		update_competition_details.apply_changes
 		redirect_to fixture
 	end
 
