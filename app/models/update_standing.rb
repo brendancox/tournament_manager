@@ -67,7 +67,7 @@ class UpdateStanding
 
 	def league_completed
 		@tournament.completed = true
-		first_place = @tournament.standings.where(placing: 1)
+		first_place = @tournament.standings.where(placing: 1).first
 		if first_place.equal_placing == false
 			@tournament.winner_id = first_place.team_id
 		end

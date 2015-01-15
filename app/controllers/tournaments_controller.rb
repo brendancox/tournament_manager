@@ -19,7 +19,8 @@ class TournamentsController < ApplicationController
   def show
   	@tournament = Tournament.find(params[:id])
     @fixtures = FixturesSet.new(@tournament)
-    if @tournament.completed
+    @standings = @tournament.standings.order("placing ASC, difference DESC")
+    if @tournament.completed && !@tournament.winner_id.blank?
       @winner = @tournament.teams.find(@tournament.winner_id).name
     end
   end
