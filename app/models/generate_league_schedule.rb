@@ -7,7 +7,7 @@ class GenerateLeagueSchedule
   def create
   	#TO ADD: check for existing fixtures for this tournament
 
-  	team_pairs_rounds = team_pairs_in_rounds(@tournament)
+  	team_pairs_rounds = team_pairs_in_rounds2(@tournament)
   	generate_league_fixtures(team_pairs_rounds)
   end
 
@@ -76,16 +76,54 @@ class GenerateLeagueSchedule
     pairs_in_rounds
   end
 
+  def team_pairs_in_rounds2(tournament)
+    team_ids = tournament.teams.all.pluck(:id)
+    fixed = team_ids[0]
+    rest = team_ids[1..-1]
+
+    # check if odd number of teams as this means there will be a bye for a team each round
+    if tournament.teams.count.odd?
+      games_per_round = (tournament.teams.length + 1) / 2
+      rounds = tournament.teams.count
+      rest.push(-1)
+    else
+      games_per_round = tournament.teams.length / 2
+      rounds = tournament.teams.count - 1
+    end
+    
+    pairs_in_rounds = Array.new
+    for round in 1..rounds
+      combined = []
+      combined = [fixed] + rest
+      for game in 0...games_per_round
+        pairs_in_rounds.push([combined[game], combined[-1 - game], round])
+      end
+
+      # alter rest array
+      last_of_rest = rest[-1]
+      for x in (1..(rest.length-1)).to_a.reverse
+        rest[x] = rest[x-1]
+      end
+      rest[0] = last_of_rest
+    end
+
+    pairs_in_rounds
+  end
+
   def generate_league_fixtures(team_pairs_array)
   	first_game_start_time = Time.new.change(hour: 18) + 1.day
+    game_count = 0
   	for i in 0...team_pairs_array.count
-  		new_fixture = @tournament.fixtures.new
-  		new_fixture.completed = false
-  		new_fixture.start_time = first_game_start_time + i.day
-  		new_fixture.game_number = i + 1
-  		new_fixture.player1_id = team_pairs_array[i][0]
-  		new_fixture.player2_id = team_pairs_array[i][1]
-  		new_fixture.save
+      unless (team_pairs_array[i][0] == -1) || (team_pairs_array[i][1] == -1)
+        game_count += 1
+    		new_fixture = @tournament.fixtures.new
+    		new_fixture.completed = false
+    		new_fixture.start_time = first_game_start_time + i.day
+    		new_fixture.game_number = game_count
+    		new_fixture.player1_id = team_pairs_array[i][0]
+    		new_fixture.player2_id = team_pairs_array[i][1]
+    		new_fixture.save
+      end
   	end
   end
 end
