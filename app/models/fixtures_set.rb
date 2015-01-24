@@ -69,6 +69,7 @@ class FixturesSet
   		@fixtures[index][:player1] = "Winner of Match #{fixture.preceding_playoff_game_number1}"
   	else
   		@fixtures[index][:player1] = @tournament.teams.find(fixture.player1_id).name
+  		@fixtures[index][:player1_id] = fixture.player1_id
   	end
   	if fixture.bye == true
   		@fixtures[index][:bye] = true
@@ -76,17 +77,18 @@ class FixturesSet
   		@fixtures[index][:player2] = "Winner of Match #{fixture.preceding_playoff_game_number2}"
   	else
   		@fixtures[index][:player2] = @tournament.teams.find(fixture.player2_id).name
+  		@fixtures[index][:player2_id] = fixture.player2_id
   	end
 	end
 
 	def add_final_score_data(fixture, index)
 		@fixtures[index][:player1_score] = fixture.player1_score
 		@fixtures[index][:player2_score] = fixture.player2_score
-		if @fixtures[index][:player1_score] > @fixtures[index][:player2_score]
+		if fixture.winner_id == fixture.player1_id
 			@fixtures[index][:winner] = @fixtures[index][:player1]
-		elsif @fixtures[index][:player1_score] < @fixtures[index][:player2_score]
+		elsif fixture.winner_id == fixture.player2_id
 			@fixtures[index][:winner] = @fixtures[index][:player2]
-		else 
+		else
 			@fixtures[index][:draw] = true
 		end
 	end

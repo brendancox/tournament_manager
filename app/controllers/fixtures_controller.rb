@@ -15,16 +15,20 @@ class FixturesController < ApplicationController
 	def record_result
 		fixture = Fixture.update(params[:id], record_result_params)
 		fixture.completed = true
-		if fixture.player1_score > fixture.player2_score
-			fixture.winner_id = fixture.player1_id
-		elsif fixture.player2_score > fixture.player1_score
-			fixture.winner_id = fixture.player2_id
-		else
-			fixture.winner_id = -1  # winner_id is -1 for a draw
+		if fixture.winner_id.blank?
+			puts params[:fixture][:player1_score].class
+			if fixture.player1_score > fixture.player2_score
+				fixture.winner_id = fixture.player1_id
+			elsif fixture.player2_score > fixture.player1_score
+				fixture.winner_id = fixture.player2_id
+			else
+				fixture.winner_id = -1  # winner_id is -1 for a draw
+			end
 		end
 		fixture.save
 		tournament = Tournament.find(fixture.tournament_id)
-		if tournament.format == "Playoff"
+		if tournament.format == "Playoffs"
+			puts 'PLAYOFFS'
 			update_competition_details = UpdatePlayoff.new(tournament, fixture)
 		elsif tournament.format == "League"
 			update_competition_details = UpdateStanding.new(tournament, fixture)
@@ -44,6 +48,6 @@ class FixturesController < ApplicationController
 	private 
 
 	def record_result_params
-		params.require(:fixture).permit(:player1_score, :player2_score)
+		params.require(:fixture).permit(:player1_score, :player2_score, :winner_id)
 	end
 end

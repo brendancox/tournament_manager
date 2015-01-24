@@ -2,10 +2,25 @@
 <p>Start time: <%= @fixture[:time] %></p>
 <p>Match <%= @fixture[:game_number] %> of <%= @tournament.name %></p>
 
-<%= form_for @fixture_record, url: {action: 'record_result'} do |f| %>
-	<%= f.label :player1_score, 'Score for ' + @fixture[:player1] %>
-	<%= f.number_field :player1_score %><br>
-	<%= f.label :player2_score, 'Score for ' + @fixture[:player2] %>
-	<%= f.number_field :player2_score %><br>
-	<%= f.submit 'Add Result' %>
+<% if @fixture[:player1_id].blank? || @fixture[:player1_id].blank? %>
+	<p>Result cannot be recorded yet as one or more of the players have not been specified</p>
+<% else %>
+	<%= form_for @fixture_record, url: {action: 'record_result'} do |f| %>
+		<%= f.label :player1_score, 'Score for ' + @fixture[:player1] %>
+		<%= f.number_field :player1_score %><br>
+		<%= f.label :player2_score, 'Score for ' + @fixture[:player2] %>
+		<%= f.number_field :player2_score %><br>
+		<% if @tournament.format == 'Playoffs' %>
+			<div id='tieBreaker' hidden=true>
+				<p>Playoff matches require a winner. Please select the result of any 
+					tie-breaker</p>
+				<%= f.label :winner_id, 'Result of tie-breaker' %>
+				<%= f.radio_button :winner_id, @fixture[:player1_id], checked: false %>
+				<%= f.label "winner_id_#{@fixture[:player1_id]}", @fixture[:player1] %>
+				<%= f.radio_button :winner_id, @fixture[:player2_id], checked: false %>
+				<%= f.label "winner_id_#{@fixture[:player2_id]}", @fixture[:player2] %>
+			</div>
+		<% end %>
+		<%= f.submit 'Add Result' %>
+	<% end %>
 <% end %>

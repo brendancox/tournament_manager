@@ -11,7 +11,7 @@
 	<% else %>
 		<p><%= @fixture[:winner] %> won.</p>
 	<% end %>
-<% else %>
+<% elsif !(@fixture[:player1_id].blank? || @fixture[:player1_id].blank?) %>
 	<%= link_to 'Add result for this match', enter_result_path(@fixture[:id]) %>
 <% end %>
 
