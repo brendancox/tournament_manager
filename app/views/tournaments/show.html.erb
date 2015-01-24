@@ -44,29 +44,34 @@
 
 	<h2>Upcoming Matches</h2>
 
-	<% @fixtures.unplayed.each do |fixture| %>
-		<% if fixture[:bye] == true %>
-			<p><%= fixture[:player1] %> has a bye for round <%= fixture[:round] %></p>
-		<% else %>
-			<p><%= link_to "Match #{fixture[:game_number]}", fixture_path(fixture[:id]) %></p>
-			<p><%= fixture[:time] %></p>
-		  <p><%= fixture[:player1] %> vs.	<%= fixture[:player2] %></p>
-		 <% end %>
+	<% @fixtures.unplayed.each do |round| %>
 
+		Round <%= round[0] %>
+		<% round[1].each do |fixture| %>
+			<% if fixture[:bye] == true %>
+				<p><%= fixture[:player1] %> has a bye for round <%= fixture[:round] %></p>
+			<% else %>
+				<p><%= link_to "Match #{fixture[:game_number]}", fixture_path(fixture[:id]) %></p>
+				<p><%= fixture[:time] %></p>
+			  <p><%= fixture[:player1] %> vs.	<%= fixture[:player2] %></p>
+			<% end %>
+		<% end %>
 	<% end %>
 <% end %>
 
 <h2>Completed Matches</h2>
 
-<% @fixtures.completed.each do |fixture| %>
+<% @fixtures.completed.each do |round| %>
 
-	<% if fixture[:bye] == true %>
-		<p><%= fixture[:player1] %> had a bye for round <%= fixture[:round] %></p>
-	<% else %>
-		<p><%= link_to "Match #{fixture[:game_number]}", fixture_path(fixture[:id]) %></p>
-		<p><%= fixture[:time] %></p>
-		<p><%= fixture[:player1] %> <%= fixture[:player1_score] %> -
-			<%= fixture[:player2_score] %> <%= fixture[:player2] %></p>
+	Round <%= round[0] %>
+	<% round[1].each do |fixture| %>
+		<% if fixture[:bye] == true %>
+			<p><%= fixture[:player1] %> had a bye for round <%= fixture[:round] %></p>
+		<% else %>
+			<p><%= link_to "Match #{fixture[:game_number]}", fixture_path(fixture[:id]) %></p>
+			<p><%= fixture[:time] %></p>
+			<p><%= fixture[:player1] %> <%= fixture[:player1_score] %> -
+				<%= fixture[:player2_score] %> <%= fixture[:player2] %></p>
+		<% end %>
 	<% end %>
-
 <% end %>

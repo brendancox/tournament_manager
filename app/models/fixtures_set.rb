@@ -23,7 +23,7 @@ class FixturesSet
 				completed_fixtures.push(fixture)
 			end
 		end
-		completed_fixtures
+		place_into_rounds(completed_fixtures)
 	end
 
 	def unplayed
@@ -33,7 +33,7 @@ class FixturesSet
 				unplayed_fixtures.push(fixture)
 			end
 		end
-		unplayed_fixtures
+		place_into_rounds(unplayed_fixtures)
 	end
 
 	private
@@ -89,5 +89,53 @@ class FixturesSet
 		else 
 			@fixtures[index][:draw] = true
 		end
+	end
+
+	def place_into_rounds(fixtures_array)
+		rounds_array = Array.new
+		bye_this_round = Array.new
+		prev_fixture_round = 0
+		fixtures_array.each do |fixture|
+			if prev_fixture_round == 0
+				rounds_array.push([fixture[:round]])
+				if fixture[:bye] == true
+					bye_this_round.push(fixture)
+				else
+					rounds_array[-1][1] = [fixture]
+				end
+				prev_fixture_round = fixture[:round]
+			elsif prev_fixture_round == fixture[:round]
+				if fixture[:bye] == true
+					bye_this_round.push(fixture)
+				else
+					rounds_array[-1][1].push(fixture)
+				end
+				prev_fixture_round = fixture[:round]
+			else
+				if rounds_array[-1][1].blank?
+					rounds_array[-1][1] = bye_this_round
+				else
+					rounds_array[-1][1].push(*bye_this_round)
+				end
+				bye_this_round = [] #clear array of byes for start of new round
+				rounds_array.push([fixture[:round]])
+				if fixture[:bye] == true
+					bye_this_round.push(fixture)
+				else
+					rounds_array[-1][1] = [fixture]
+				end
+				prev_fixture_round = fixture[:round]
+			end
+		end
+		unless bye_this_round.blank?
+			if rounds_array[-1][1].blank?
+				rounds_array[-1][1] = bye_this_round
+			else
+				rounds_array[-1][1].push(*bye_this_round)
+			end
+		end
+		puts 'rounds_array'
+		puts rounds_array
+		rounds_array
 	end
 end
