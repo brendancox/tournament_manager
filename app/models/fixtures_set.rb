@@ -108,6 +108,9 @@ class FixturesSet
 				if fixture[:bye] == true
 					bye_this_round.push(fixture)
 				else
+					if rounds_array[-1][1].blank?
+						rounds_array[-1][1] = []
+					end
 					rounds_array[-1][1].push(fixture)
 				end
 				prev_fixture_round = fixture[:round]
@@ -134,8 +137,6 @@ class FixturesSet
 				rounds_array[-1][1].push(*bye_this_round)
 			end
 		end
-		puts 'rounds_array'
-		puts rounds_array
 		rounds_array
 	end
 end
