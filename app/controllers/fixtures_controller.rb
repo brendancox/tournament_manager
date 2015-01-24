@@ -28,8 +28,16 @@ class FixturesController < ApplicationController
 			update_competition_details = UpdatePlayoff.new(tournament, fixture)
 		elsif tournament.format == "League"
 			update_competition_details = UpdateStanding.new(tournament, fixture)
+			if (tournament.fixtures.where(league_round: fixture.league_round, completed: false).count == 1)
+				last_in_round = tournament.fixtures.where(league_round: fixture.league_round, completed: false).first
+				if last_in_round.bye == true
+					last_in_round.completed = true
+					last_in_round.save
+				end
+			end
 		end
 		update_competition_details.apply_changes
+
 		redirect_to fixture
 	end
 

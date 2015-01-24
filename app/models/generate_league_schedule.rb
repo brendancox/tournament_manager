@@ -114,14 +114,31 @@ class GenerateLeagueSchedule
   	first_game_start_time = Time.new.change(hour: 18) + 1.day
     game_count = 0
   	for i in 0...team_pairs_array.count
-      unless (team_pairs_array[i][0] == -1) || (team_pairs_array[i][1] == -1)
-        game_count += 1
+      if (team_pairs_array[i][0] == -1)
+        new_fixture = @tournament.fixtures.new
+        new_fixture.completed = false
+        new_fixture.player1_id = team_pairs_array[i][1]
+        new_fixture.league_round = team_pairs_array[i][2]
+        new_fixture.bye = true
+        new_fixture.save
+      elsif (team_pairs_array[i][1] == -1)
+        new_fixture = @tournament.fixtures.new
+        new_fixture.completed = false
+        new_fixture.player1_id = team_pairs_array[i][0]
+        new_fixture.league_round = team_pairs_array[i][2]
+        new_fixture.bye = true
+        new_fixture.save
+      else
     		new_fixture = @tournament.fixtures.new
     		new_fixture.completed = false
-    		new_fixture.start_time = first_game_start_time + i.day
+    		new_fixture.start_time = first_game_start_time + game_count.day
+        # game count increases after start time - so that first game starts at first_game_start_time
+        # game count increases before game number - so that game_number starts at 1
+        game_count += 1
     		new_fixture.game_number = game_count
     		new_fixture.player1_id = team_pairs_array[i][0]
     		new_fixture.player2_id = team_pairs_array[i][1]
+        new_fixture.league_round = team_pairs_array[i][2]
     		new_fixture.save
       end
   	end

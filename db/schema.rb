@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150104082432) do
+ActiveRecord::Schema.define(version: 20150123235931) do
 
   create_table "activities", force: true do |t|
     t.string   "name"
@@ -36,6 +36,8 @@ ActiveRecord::Schema.define(version: 20150104082432) do
     t.integer  "game_number"
     t.integer  "preceding_playoff_game_number1"
     t.integer  "preceding_playoff_game_number2"
+    t.integer  "league_round"
+    t.boolean  "bye"
   end
 
   create_table "participants", force: true do |t|

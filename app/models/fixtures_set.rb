@@ -41,10 +41,19 @@ class FixturesSet
 	def add_fixtures_data(fixture, index=0)
 		@fixtures[index] = Hash.new
 		@fixtures[index][:id] = fixture.id
-		@fixtures[index][:game_number] = fixture.game_number
-		add_fixture_time(fixture, index)
+		unless fixture.league_round.blank?
+			@fixtures[index][:round] = fixture.league_round
+		end
+		unless fixture.playoff_round.blank?
+			@fixtures[index][:round] = fixture.playoff_round
+		end
+		unless fixture.bye == true
+			@fixtures[index][:game_number] = fixture.game_number
+			add_fixture_time(fixture, index)
+		end
 		add_team_data(fixture, index)
-		if @fixtures[index][:completed] = fixture.completed
+		@fixtures[index][:completed] = fixture.completed
+		if (@fixtures[index][:completed]) && (fixture.bye != true) 
 			add_final_score_data(fixture, index)
 		end
 	end
@@ -61,7 +70,9 @@ class FixturesSet
   	else
   		@fixtures[index][:player1] = @tournament.teams.find(fixture.player1_id).name
   	end
-		if fixture.player2_id.blank?
+  	if fixture.bye == true
+  		@fixtures[index][:bye] = true
+		elsif fixture.player2_id.blank?
   		@fixtures[index][:player2] = "Winner of Match #{fixture.preceding_playoff_game_number2}"
   	else
   		@fixtures[index][:player2] = @tournament.teams.find(fixture.player2_id).name

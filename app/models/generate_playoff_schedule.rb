@@ -110,13 +110,13 @@ class GeneratePlayoffSchedule
       for i in 0...num_of_games
         new_fixture = generate_new_fixture(first_game_start_time, i)
         if 2*i < @straight_to_third_round.count
-          new_fixture.player1_id = @straight_to_third_round[2*i]
+          new_fixture.preceding_playoff_game_number1 = @tournament.fixtures.find(@straight_to_third_round[2*i]).game_number
         else
           update_preceding_with_next_playoff_id(preceding_round_fixtures[preceding_round_count], new_fixture, 1)
           preceding_round_count += 1
         end
         if 2*i+1 < @straight_to_third_round.count
-          new_fixture.player2_id = @straight_to_third_round[2*i+1]
+          new_fixture.preceding_playoff_game_number2 = @tournament.fixtures.find(@straight_to_third_round[2*i+1]).game_number
         else
           update_preceding_with_next_playoff_id(preceding_round_fixtures[preceding_round_count], new_fixture, 2)
           preceding_round_count += 1

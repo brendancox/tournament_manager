@@ -45,7 +45,7 @@ describe "generate league schedules" do
 			end
 
 			it "includes correct number of fixtures" do
-				expect(Tournament.first.fixtures.count).to eq(10)
+				expect(Tournament.first.fixtures.count).to eq(15)
 			end
 		end
 	end
