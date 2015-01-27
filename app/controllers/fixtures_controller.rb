@@ -28,7 +28,6 @@ class FixturesController < ApplicationController
 		fixture.save
 		tournament = Tournament.find(fixture.tournament_id)
 		if tournament.format == "Playoffs"
-			puts 'PLAYOFFS'
 			update_competition_details = UpdatePlayoff.new(tournament, fixture)
 		elsif tournament.format == "League"
 			update_competition_details = UpdateStanding.new(tournament, fixture)

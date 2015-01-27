@@ -4,6 +4,9 @@ class FixturesSet
 		@tournament = tournament
 		@fixtures = Array.new
 		if fixture.blank?
+			if @tournament.format == "Playoffs"
+				@final_round = @tournament.fixtures.order("playoff_round DESC").first.playoff_round
+			end
 			@tournament.fixtures.each_with_index do |fixture, index|
 				add_fixtures_data(fixture, index)
 			end
@@ -14,6 +17,18 @@ class FixturesSet
 
 	def data
 		@fixtures
+	end
+
+	def final
+		@fixtures.select {|game| game[:final] == true}[0]
+	end
+
+	def left_side
+		final_game = final
+		left_side_array = Array.new
+		unless final_game[:preceding_game1].blank?
+			left_semi = final_game[:preceding_game1]
+		end
 	end
 
 	def completed
@@ -52,6 +67,21 @@ class FixturesSet
 			add_fixture_time(fixture, index)
 		end
 		add_team_data(fixture, index)
+		if @final_round #only defined if tournament format is playoffs
+			if fixture.playoff_round == @final_round
+				@fixtures[index][:final] = true
+			end
+			if fixture.preceding_playoff_game_number1
+				@fixtures[index][:preceding_game1] = fixture.preceding_playoff_game_number1
+			else
+				@fixtures[index][:preceding_game1] = -1 
+			end
+			if fixture.preceding_playoff_game_number2
+				@fixtures[index][:preceding_game2] = fixture.preceding_playoff_game_number2
+			else
+				@fixtures[index][:preceding_game2] = -1
+			end
+		end
 		@fixtures[index][:completed] = fixture.completed
 		if (@fixtures[index][:completed]) && (fixture.bye != true) 
 			add_final_score_data(fixture, index)
