@@ -27,8 +27,92 @@ class FixturesSet
 		final_game = final
 		left_side_array = Array.new
 		unless final_game[:preceding_game1].blank?
-			left_semi = final_game[:preceding_game1]
+			left_side_array[0] = Array.new
+			semi = @fixtures.select {|game| game[:game_number] == final_game[:preceding_game1]}[0]
+			left_side_array[0].push(semi)
 		end
+		still_searching = true
+		more_to_go = false
+		round = 1
+		following_game = 0
+		while still_searching
+			pre1 = left_side_array[round-1][following_game][:preceding_game1]
+			pre2 = left_side_array[round-1][following_game][:preceding_game2]
+			unless pre1 == -1
+				if left_side_array[round].blank?
+					left_side_array[round] = Array.new
+				end
+				game_to_add = @fixtures.select {|game| game[:game_number] == pre1}[0]
+				left_side_array[round].push(game_to_add)
+				if (game_to_add[:preceding_game1] != -1) || (game_to_add[:preceding_game2] != -1)
+					more_to_go = true
+				end
+			end
+			unless pre2 == -1
+				if left_side_array[round].blank?
+					left_side_array[round] = Array.new
+				end
+				game_to_add = @fixtures.select {|game| game[:game_number] == pre2}[0]
+				left_side_array[round].push(game_to_add)
+				if (game_to_add[:preceding_game1] != -1) || (game_to_add[:preceding_game2] != -1)
+					more_to_go = true
+				end
+			end
+			following_game += 1
+			if left_side_array[round-1][following_game].blank? && more_to_go
+				round += 1
+				following_game = 0
+			elsif left_side_array[round-1][following_game].blank? && !more_to_go
+				still_searching = false
+			end
+		end
+		left_side_array
+	end
+
+	def right_side
+		final_game = final
+		right_side_array = Array.new
+		unless final_game[:preceding_game2].blank?
+			right_side_array[0] = Array.new
+			semi = @fixtures.select {|game| game[:game_number] == final_game[:preceding_game2]}[0]
+			right_side_array[0].push(semi)
+		end
+		still_searching = true
+		more_to_go = false
+		round = 1
+		following_game = 0
+		while still_searching
+			pre1 = right_side_array[round-1][following_game][:preceding_game1]
+			pre2 = right_side_array[round-1][following_game][:preceding_game2]
+			unless pre1 == -1
+				if right_side_array[round].blank?
+					right_side_array[round] = Array.new
+				end
+				game_to_add = @fixtures.select {|game| game[:game_number] == pre1}[0]
+				right_side_array[round].push(game_to_add)
+				if (game_to_add[:preceding_game1] != -1) || (game_to_add[:preceding_game2] != -1)
+					more_to_go = true
+				end
+			end
+			unless pre2 == -1
+				if right_side_array[round].blank?
+					right_side_array[round] = Array.new
+				end
+				game_to_add = @fixtures.select {|game| game[:game_number] == pre2}[0]
+				right_side_array[round].push(game_to_add)
+				if (game_to_add[:preceding_game1] != -1) || (game_to_add[:preceding_game2] != -1)
+					more_to_go = true
+				end
+			end
+			following_game += 1
+			if right_side_array[round-1][following_game].blank? && more_to_go
+				round += 1
+				following_game = 0
+			elsif right_side_array[round-1][following_game].blank? && !more_to_go
+				still_searching = false
+			end
+		end
+		right_side_array
 	end
 
 	def completed
