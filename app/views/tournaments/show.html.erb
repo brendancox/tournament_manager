@@ -6,13 +6,9 @@
 
 
 <% if @tournament.format == "League" %>
-
 	<%= render 'layouts/league_table', standings: @standings %>
-
 <% elsif @tournament.format == "Playoffs" %>
-
 	<%= render 'layouts/playoff_chart', fixtures: @fixtures %>
-
 <% end %>
 
 <% if @winner %>

@@ -1,25 +1,32 @@
+<div class="playoff_chart">
+	<% fixtures.left_side.each do |round| %>
+		<div class="playoff_chart_round">
+			<% round.each do |game| %>
+				<div class="playoff_chart_game">
+					<%= game[:player1] %><br>
+					vs<br>
+					<%= game[:player2] %>
+				</div>
+			<% end %>
+		</div>
+	<% end %>
 
-<% fixtures.left_side.each do |round| %>
-	<div class="playoff_chart_round">
-		<% round.each do |game| %>
-			<div class="playoff_chart_game">
-				<%= game[:player1] %> vs <%= game[:player2] %>
-			</div>
-		<% end %>
+	<div class="final">
+		<p>Final</p>
+		<%= fixtures.final[:player1] %><br>
+		vs<br>
+		<%= fixtures.final[:player2] %>
 	</div>
-<% end %>
 
-<div class="final">
-	<p>Final</p>
-	<%= fixtures.final[:player1] %> vs <%= fixtures.final[:player2] %>
+	<% fixtures.right_side.each do |round| %>
+		<div class="playoff_chart_round">
+			<% round.each do |game| %>
+				<div class="playoff_chart_game">
+					<%= game[:player1] %><br>
+					vs<br>
+					<%= game[:player2] %>
+				</div>
+			<% end %>
+		</div>
+	<% end %>
 </div>
-
-<% fixtures.right_side.each do |round| %>
-	<div class="playoff_chart_round">
-		<% round.each do |game| %>
-			<div class="playoff_chart_game">
-				<%= game[:player1] %> vs <%= game[:player2] %>
-			</div>
-		<% end %>
-	</div>
-<% end %>
