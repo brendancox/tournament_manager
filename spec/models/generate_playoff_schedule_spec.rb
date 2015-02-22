@@ -50,6 +50,43 @@ describe "generate playoff schedules" do
 
 	end
 
+	context "first round fixtures with new methods" do
+		before do 
+			subject.create_empty
+		end
+
+		it "created" do
+			expect(Fixture.where(playoff_round: 1).count).to eq(2)
+		end
+
+		it "should assign one team to one fixture" do
+			teams_array = [Fixture.where(playoff_round: 1).first.player1_id, 
+				Fixture.where(playoff_round: 1).first.player2_id,
+				Fixture.where(playoff_round: 1).last.player1_id, 
+				Fixture.where(playoff_round: 1).last.player2_id]
+			expect(teams_array.uniq.length).to eq(teams_array.length)
+		end
+
+		it "completed should be set to false" do
+			expect(Fixture.first.completed).to eq(false)
+		end
+
+		it "should set first fixture for tomorrow 6pm" do
+			tomorrow_at_six = Time.new.change(hour: 18) + 1.day
+			expect(Fixture.first.start_time).to eq(tomorrow_at_six)
+		end
+
+		it "should set second fixture for 24 hours later" do 
+			day_after_at_six = Time.new.change(hour: 18) + 2.day
+			expect(Fixture.second.start_time).to eq(day_after_at_six)
+		end
+
+		it "should add playoff round number to fixtures" do
+			expect(Fixture.first.playoff_round).to eq(1)
+		end
+
+	end
+
 	context "second round fixtures (where num of teams = 2^x)" do
 		before do 
 			subject.create

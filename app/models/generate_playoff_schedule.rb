@@ -19,6 +19,35 @@ class GeneratePlayoffSchedule
     end
   end
 
+  def create_empty
+    @game_number = 1
+    @current_round = 1
+    @remaining_teams = @tournament.teams.count
+    first_game_start_time = Time.new.change(hour: 18) + 1.day
+    # To remove determine_rounds and alter games_in_subround, keeping for now to focus on
+    # other functionality. 
+    determine_rounds
+    if games_in_subround == 0
+      while @remaining_teams > 2
+        remaining_teams_this_round = @remaining_teams
+        if @current_round > 1
+          preceding_round_fixtures = @tournament.fixtures.where(playoff_round: @current_round-1).pluck(:id)
+        end
+        while remaining_teams_this_round > 1
+          new_fixture = generate_next_fixture(first_game_start_time)
+          new_fixture.save
+          if @current_round > 1
+            update_preceding_with_next_playoff_id(preceding_round_fixtures[2*i], new_fixture, 1)
+            update_preceding_with_next_playoff_id(preceding_round_fixtures[2*i+1], new_fixture, 2)
+          end
+          remaining_teams_this_round -= 2
+        end
+        @current_round += 1
+        @remaining_teams /= 2
+      end
+    end
+  end
+
   private
 
   def determine_rounds
@@ -150,3 +179,14 @@ class GeneratePlayoffSchedule
     next_playoff.save
   end
 end
+
+  def generate_next_fixture(first_game_start_time)
+    new_fixture = @tournament.fixtures.new
+    new_fixture.completed = false #should this be added to fixtures model (before save, if blank)
+    new_fixture.start_time = first_game_start_time + (@game_number-1).day
+    new_fixture.playoff_round = @current_round
+    new_fixture.game_number = @game_number
+    @game_number += 1
+    #current_stage column was meant to be for final, semifinal etc. will add this later
+    new_fixture
+  end
