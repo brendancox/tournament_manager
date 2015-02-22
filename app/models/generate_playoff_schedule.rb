@@ -28,23 +28,41 @@ class GeneratePlayoffSchedule
     # other functionality. 
     determine_rounds
     if games_in_subround == 0
-      while @remaining_teams > 2
+      while @remaining_teams > 1
         remaining_teams_this_round = @remaining_teams
         if @current_round > 1
           preceding_round_fixtures = @tournament.fixtures.where(playoff_round: @current_round-1).pluck(:id)
         end
+        i = 0
         while remaining_teams_this_round > 1
           new_fixture = generate_next_fixture(first_game_start_time)
           new_fixture.save
           if @current_round > 1
             update_preceding_with_next_playoff_id(preceding_round_fixtures[2*i], new_fixture, 1)
             update_preceding_with_next_playoff_id(preceding_round_fixtures[2*i+1], new_fixture, 2)
+            i += 1
           end
           remaining_teams_this_round -= 2
         end
         @current_round += 1
         @remaining_teams /= 2
       end
+    end
+  end
+
+  def assign_teams
+    teams_to_add_to_fixtures = @tournament.teams.all.pluck(:id).shuffle
+    i = 0
+    game = 1
+    while i < teams_to_add_to_fixtures.count
+      this_fixture = @tournament.fixtures.where(game_number: game).first
+      this_fixture.player1_id = teams_to_add_to_fixtures[i]
+      this_fixture.save
+      i += 1
+      this_fixture.player2_id = teams_to_add_to_fixtures[i]
+      this_fixture.save
+      i += 1
+      game += 1
     end
   end
 

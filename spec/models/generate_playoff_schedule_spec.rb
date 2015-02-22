@@ -50,9 +50,10 @@ describe "generate playoff schedules" do
 
 	end
 
-	context "first round fixtures with new methods" do
+	context "2^x tournaments with new methods" do
 		before do 
 			subject.create_empty
+			subject.assign_teams
 		end
 
 		it "created" do
@@ -85,6 +86,13 @@ describe "generate playoff schedules" do
 			expect(Fixture.first.playoff_round).to eq(1)
 		end
 
+		it "second round created" do
+			expect(Fixture.last.playoff_round).to eq(2)
+		end
+
+		it "first round fixtures show next_playoff_id" do
+			expect(Fixture.first.next_playoff_id).to eq(Fixture.last.id)
+		end
 	end
 
 	context "second round fixtures (where num of teams = 2^x)" do
