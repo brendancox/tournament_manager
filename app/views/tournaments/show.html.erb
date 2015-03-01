@@ -9,6 +9,8 @@
 	<%= render 'layouts/league_table', standings: @standings %>
 <% elsif @tournament.format == "Playoffs" %>
 	<%= render 'layouts/playoff_chart', fixtures: @fixtures %>
+<% elsif @tournament.format == "League then Playoffs" %>
+	<%= render 'layouts/league_table', standings: @standings %>
 <% end %>
 
 <% if @winner %>

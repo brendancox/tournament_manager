@@ -4,7 +4,7 @@ class FixturesSet
 		@tournament = tournament
 		@fixtures = Array.new
 		if fixture.blank?
-			if @tournament.format == "Playoffs"
+			if @tournament.format == "Playoffs" || "League then Playoffs"
 				@final_round = @tournament.fixtures.order("playoff_round DESC").first.playoff_round
 			end
 			@tournament.fixtures.each_with_index do |fixture, index|
@@ -145,6 +145,7 @@ class FixturesSet
 		end
 		unless fixture.playoff_round.blank?
 			@fixtures[index][:round] = fixture.playoff_round
+			@fixtures[index][:is_playoff] = true
 		end
 		unless fixture.bye == true
 			@fixtures[index][:game_number] = fixture.game_number

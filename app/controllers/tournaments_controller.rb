@@ -62,14 +62,16 @@ class TournamentsController < ApplicationController
       league_schedule.create
       last_game_number = tournament.fixtures.order("game_number ASC").last.game_number
       playoff_schedule = GeneratePlayoffSchedule.new(tournament)
-      playoff_schedule.create_empty(tournament.teams_in_playoffs, last_game_number)
+      playoff_schedule.create_empty(tournament.teams_in_playoffs, last_game_number + 1)
       num_in_playoffs = tournament.teams_in_playoffs # assigning to variable to lower db queries
       lowest_rank = num_in_playoffs
       highest_rank = 1
       team_rankings = Array.new
       while team_rankings.length < (num_in_playoffs-1)
         team_rankings.push(lowest_rank)
-        team_rankings.push(highest_rank)
+        unless lowest_rank == highest_rank
+          team_rankings.push(highest_rank)
+        end
         lowest_rank -= 1
         highest_rank += 1
       end

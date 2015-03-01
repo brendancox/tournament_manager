@@ -1,6 +1,6 @@
 <h1><%= @fixture[:player1] %> vs.	<%= @fixture[:player2] %></h1>
 <p>Start time: <%= @fixture[:time] %></p>
-<p>Match <%= @fixture[:game_number] %> of <%= @tournament.name %></p>
+<p>Match <%= @fixture[:game_number] %> of <%= link_to @tournament.name, @tournament %></p>
 
 <% if @fixture[:player1_id].blank? || @fixture[:player1_id].blank? %>
 	<p>Result cannot be recorded yet as one or more of the players have not been specified</p>
