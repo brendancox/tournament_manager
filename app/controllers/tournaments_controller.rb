@@ -38,6 +38,8 @@ class TournamentsController < ApplicationController
   	tournament = Tournament.update(params[:id], add_team_params)
     if tournament.format == "Playoffs"
       schedule = GeneratePlayoffSchedule.new(tournament)
+      schedule.create_empty
+      schedule.assign_teams
     elsif tournament.format == "League"
       schedule = GenerateLeagueSchedule.new(tournament)
       tournament.teams.each do |team|
@@ -47,8 +49,8 @@ class TournamentsController < ApplicationController
         standing.set_to_zero(team)
         standing.save
       end
+      schedule.create
     end
-    schedule.create
   	redirect_to tournament
   end
 

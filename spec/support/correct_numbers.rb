@@ -5,7 +5,7 @@ def load_playoff_numbers
 	#games 
 	num_of_games = Array.new 
 	num_of_games[4] = [0,2,1]
-	num_of_games[7] = [0,3,2,1]
-	num_of_games[17] = [0,8,1,4,2,1]
+	num_of_games[7] = [0,3,0,2,1]
+	num_of_games[17] = [0,9,1,4,2,1]  #including bye
 	num_of_games
 end
