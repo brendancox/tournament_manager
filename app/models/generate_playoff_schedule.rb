@@ -19,10 +19,14 @@ class GeneratePlayoffSchedule
     end
   end
 
-  def create_empty(round_pre_sub = 1)
-    @game_number = 1
+  def create_empty(number_of_teams = 0, first_game_number = 1, round_pre_sub = 1)
+    @game_number = first_game_number #league then playoffs will already have game numbers
     @current_round = 1
-    @remaining_teams = @tournament.teams.count
+    if number_of_teams == 0
+      @remaining_teams = @tournament.teams.count
+    else
+      @remaining_teams = number_of_teams
+    end
     first_game_start_time = Time.new.change(hour: 18) + 1.day
     # To remove determine_rounds and alter games_in_subround, keeping for now to focus on
     # other functionality.  

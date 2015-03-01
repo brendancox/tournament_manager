@@ -179,7 +179,9 @@ class FixturesSet
 	end
 
 	def add_team_data(fixture, index)
-		if fixture.player1_id.blank?
+		if fixture.player1_id.blank? && fixture.preceding_playoff_game_number1.blank?
+			@fixtures[index][:player1] = "League placing #{fixture.preceding_league_ranking1}"
+		elsif fixture.player1_id.blank?
   		@fixtures[index][:player1] = "Winner of Match #{fixture.preceding_playoff_game_number1}"
   	else
   		@fixtures[index][:player1] = @tournament.teams.find(fixture.player1_id).name
@@ -187,6 +189,8 @@ class FixturesSet
   	end
   	if fixture.bye == true
   		@fixtures[index][:bye] = true
+  	elsif fixture.player2_id.blank? && fixture.preceding_playoff_game_number2.blank?
+			@fixtures[index][:player2] = "League placing #{fixture.preceding_league_ranking2}"
 		elsif fixture.player2_id.blank?
   		@fixtures[index][:player2] = "Winner of Match #{fixture.preceding_playoff_game_number2}"
   	else

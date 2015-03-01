@@ -8,7 +8,10 @@
   <%= f.select :activity_id, @activity_select_options %><br>
 
   <%= f.label :format, "Type" %>
-  <%= f.select :format, ["Playoffs", "League"] %><br>
+  <%= f.select :format, ["Playoffs", "League", "League then Playoffs"] %><br>
+
+  <%= f.label :teams_in_playoffs, "Number of teams in playoffs" %>
+  <%= f.number_field :teams_in_playoffs %><br>
 
   <%= f.submit "Next" %>
 <% end %>
