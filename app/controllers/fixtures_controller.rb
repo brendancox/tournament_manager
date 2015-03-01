@@ -6,6 +6,18 @@ class FixturesController < ApplicationController
 		@fixture = FixturesSet.new(@tournament, fixture).data[0]
 	end
 
+	def edit
+		@fixture_record = Fixture.find(params[:id])
+		@tournament = Tournament.find(@fixture_record.tournament_id)
+		@fixture = FixturesSet.new(@tournament, @fixture_record).data[0]
+	end
+
+	def update
+		fixture = Fixture.find(params[:id])
+		fixture.update(update_params)
+		redirect_to fixture
+	end
+
 	def enter_result
 		@fixture_record = Fixture.find(params[:id])
 		@tournament = Tournament.find(@fixture_record.tournament_id)
@@ -74,5 +86,9 @@ class FixturesController < ApplicationController
 
 	def record_result_params
 		params.require(:fixture).permit(:player1_score, :player2_score, :winner_id)
+	end
+
+	def update_params
+		params.require(:fixture).permit(:id, :location, :referee, :start_time)
 	end
 end

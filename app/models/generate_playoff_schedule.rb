@@ -139,6 +139,7 @@ end
   def generate_next_fixture(first_game_start_time)
     new_fixture = @tournament.fixtures.new
     new_fixture.completed = false #should this be added to fixtures model (before save, if blank)
+    new_fixture.location = @tournament.location
     new_fixture.start_time = first_game_start_time + (@game_number-1).day
     new_fixture.playoff_round = @current_round
     new_fixture.game_number = @game_number

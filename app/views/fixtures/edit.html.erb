@@ -1,8 +1,20 @@
 <h1><%= @fixture[:player1] %> vs.	<%= @fixture[:player2] %></h1>
-<p>Start time: <%= @fixture[:time] %></p>
-<p><%= @fixture[:location] %></p>
-<p>Referee: <%= @fixture[:referee] %></p>
-<%= link_to "Edit details", edit_fixture_path(@fixture[:id]) %>
+
+<p>Update details</p>
+<%= form_for @fixture_record do |f| %>
+	<%= f.label :start_time, "Start time" %>
+	<%= f.text_field :start_time, discard_seconds: true, class: 'datetimepicker' %><br>
+
+	<%= f.label :location, "Location" %>
+	<%= f.text_field :location %><br>
+
+	<%= f.label :referee, "Referee" %>
+	<%= f.text_field :referee %><br>
+
+  <%= f.submit "Update" %>
+<% end %>
+
+ 
 <p>Match <%= @fixture[:game_number] %> of <%= link_to @tournament.name, @tournament %></p>
 
 <% if @fixture[:completed] %>
@@ -15,6 +27,5 @@
 		<p><%= @fixture[:winner] %> won.</p>
 	<% end %>
 <% elsif !(@fixture[:player1_id].blank? || @fixture[:player1_id].blank?) %>
-	<%= link_to 'Add result for this match', enter_result_path(@fixture[:id]) %>
+	<p>Not yet played</p>
 <% end %>
-

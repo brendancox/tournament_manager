@@ -140,6 +140,8 @@ class FixturesSet
 	def add_fixtures_data(fixture, index=0)
 		@fixtures[index] = Hash.new
 		@fixtures[index][:id] = fixture.id
+		@fixtures[index][:location] = fixture.location
+		@fixtures[index][:referee] = fixture.referee
 		unless fixture.league_round.blank?
 			@fixtures[index][:round] = fixture.league_round
 		end

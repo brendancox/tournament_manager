@@ -3,6 +3,12 @@
 
 <p><%= @tournament.activity.name %></p>
 
+<p><%= @tournament.location %></p>
+
+<% unless @tournament.organisation.blank? %>
+	<p>Organised by <%= @tournament.organisation %></p>
+<% end %>
+
 
 
 <% if @tournament.format == "League" %>
