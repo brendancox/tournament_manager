@@ -41,25 +41,9 @@ class TournamentsController < ApplicationController
       schedule.create_empty
       schedule.assign_teams
     elsif tournament.format == "League"
-      schedule = GenerateLeagueSchedule.new(tournament)
-      tournament.teams.each do |team|
-        # may want to confirm team does not already have a standing for this competition - if 
-        # this is not checked in model before saving. 
-        standing = tournament.standings.new
-        standing.set_to_zero(team)
-        standing.save
-      end
-      schedule.create
+      GenerateLeagueSchedule.new(tournament).create
     elsif tournament.format == "League then Playoffs"
-      league_schedule = GenerateLeagueSchedule.new(tournament)
-      tournament.teams.each do |team|
-        # may want to confirm team does not already have a standing for this competition - if 
-        # this is not checked in model before saving. 
-        standing = tournament.standings.new
-        standing.set_to_zero(team)
-        standing.save
-      end
-      league_schedule.create
+      GenerateLeagueSchedule.new(tournament).create
       last_game_number = tournament.fixtures.order("game_number ASC").last.game_number
       playoff_schedule = GeneratePlayoffSchedule.new(tournament)
       playoff_schedule.create_empty(tournament.teams_in_playoffs, last_game_number + 1)

@@ -9,6 +9,15 @@ class GenerateLeagueSchedule
 
   	team_pairs_rounds = team_pairs_in_rounds2(@tournament)
   	generate_league_fixtures(team_pairs_rounds)
+
+    # add standings
+    @tournament.teams.each do |team|
+      # may want to confirm team does not already have a standing for this competition - if 
+      # this is not checked in model before saving. 
+      standing = @tournament.standings.new
+      standing.set_to_zero(team)
+      standing.save
+    end
   end
 
   protected

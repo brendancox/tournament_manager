@@ -6,11 +6,6 @@ describe UpdateStanding do
 		tournament = Tournament.first
 		tournament.update(team_ids: [1, 2, 3, 4])
 		GenerateLeagueSchedule.new(tournament).create
-	  tournament.teams.each do |team| #this loop is currently in tournaments_controller
-      standing = tournament.standings.new
-      standing.set_to_zero(team)
-      standing.save
-    end
 	end
 
 	it "gives four standings initially with zero points" do
