@@ -179,6 +179,7 @@ class FixturesSet
 		# IMPORTANT: to keep in mind that localtime will show time based on timezone of the server.
 		# To query users local time from database once devise has been added
 		@fixtures[index][:time] = fixture.start_time.localtime.strftime('%-I:%M%p %A, %d %B %Y')
+		@fixtures[index][:time_for_input] = fixture.start_time.localtime.strftime('%d-%b-%Y %H:%M')
 	end
 
 	def add_team_data(fixture, index)

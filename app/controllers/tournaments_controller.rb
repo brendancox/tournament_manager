@@ -49,6 +49,11 @@ class TournamentsController < ApplicationController
   	redirect_to tournament
   end
 
+  def update_schedule
+    @tournament = Tournament.find(params[:id])
+    @fixtures = FixturesSet.new(@tournament)
+  end
+
   private
 
   def tournament_params

@@ -12,7 +12,9 @@ class FixturesController < ApplicationController
 		@fixture = FixturesSet.new(@tournament, @fixture_record).data[0]
 	end
 
-	def update
+	def update 
+		# if fixture time is updated individually, need to check if this means a change in round
+		# and also need to make sure that any following playoffs are scheduled for after it.
 		fixture = Fixture.find(params[:id])
 		fixture.update(update_params)
 		redirect_to fixture
@@ -81,6 +83,16 @@ class FixturesController < ApplicationController
 
 		redirect_to fixture
 	end
+
+	def update_details
+    puts params[:fixture][:id]
+    fixture = Fixture.find(params[:fixture][:id])
+    fixture.start_time = params[:fixture][:time]
+    fixture.save
+    respond_to do |format|
+      format.json {render :nothing => true}
+    end
+  end
 
 	private 
 

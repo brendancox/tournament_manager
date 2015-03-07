@@ -9,7 +9,9 @@ Rails.application.routes.draw do
 
   get 'tournaments/:id/add_teams', to: 'tournaments#add_teams', as: 'add_teams'
   patch 'tournaments/:id/generate_schedule', to: 'tournaments#generate_schedule', as: 'generate_schedule'
-
+  get 'tournaments/:id/update_schedule', to: 'tournaments#update_schedule', as: 'update_schedule'
+  put 'update_details', to: 'fixtures#update_details', as: 'update_details'
+  
   get 'fixtures/:id/enter_result', to: 'fixtures#enter_result', as: 'enter_result'
   patch 'fixtures/:id/record_result', to: 'fixtures#record_result', as: 'record_result'
 
