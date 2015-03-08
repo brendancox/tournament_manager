@@ -1,4 +1,13 @@
 <h1>All Tournaments</h1>
-<% @tournaments.each do |tournament| %>
-  <%= link_to tournament.name, tournament %><br>
-<% end %>
+
+<table class='table'>
+
+	<% @tournaments.each do |tournament| %>
+		<tr>
+			<td><%= link_to tournament.name, tournament %></td>
+			<td><%= tournament.activity.name %></td>
+			<td><%= tournament.location %></td>
+		</tr>
+	<% end %>
+
+</table>

@@ -1,9 +1,10 @@
+<div class='col-sm-6'>
+
 <h1><%= @tournament.name %></h1>
-<h2>Update Schedule</h2>
 
-<p><%= @tournament.activity.name %></p>
+<p class='lead'><%= @tournament.location %></p>
 
-<p><%= @tournament.location %></p>
+<p class='lead'><%= @tournament.activity.name %></p>
 
 <% unless @tournament.organisation.blank? %>
 	<p>Organised by <%= @tournament.organisation %></p>
@@ -13,25 +14,25 @@
 	<p>All scheduled games have already been played.</p>
 <% else %>
 
-	<h2>Upcoming Matches</h2>
 
-	<% @fixtures.unplayed.each do |round| %>
+	<h3>Upcoming Matches</h3>
 
-		Round <%= round[0] %>
-		<% round[1].each do |fixture| %>
-			<% if fixture[:bye] == true %>
-				<p><%= fixture[:player1] %> has a bye for round <%= fixture[:round] %></p>
-			<% else %>
-				<p><%= link_to "Match #{fixture[:game_number]}", fixture_path(fixture[:id]) %></p>
-				<div class="container">
-				  <div class="row">
-				    <div class='col-sm-6'>
-							<%= text_field_tag fixture[:id], fixture[:time_for_input], class: 'scheduleChangeTime form-control datetimepicker1' %>
-					  </div>
-					</div>
-				</div>				
-			  <p><%= fixture[:player1] %> vs.	<%= fixture[:player2] %></p>
+
+		<% @fixtures.unplayed.each do |round| %>
+
+			<h4>Round <%= round[0] %></h4>
+			<% round[1].each do |fixture| %>
+				<div class='fixture_block'>
+					<% if fixture[:bye] == true %>
+						<p class='lead text-center'><%= fixture[:player1] %> has a bye for round <%= fixture[:round] %></p>
+					<% else %>
+						<p><%= link_to "Match #{fixture[:game_number]}", fixture_path(fixture[:id]) %></p>
+						<%= text_field_tag fixture[:id], fixture[:time_for_input], class: 'scheduleChangeTime form-control datetimepicker1' %>
+						<br>
+					  <p class='lead text-center'><%= fixture[:player1] %> vs.	<%= fixture[:player2] %></p>
+					<% end %>
+				</div>
 			<% end %>
 		<% end %>
-	<% end %>
+	</div>
 <% end %>

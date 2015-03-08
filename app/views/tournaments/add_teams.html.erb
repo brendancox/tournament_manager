@@ -1,17 +1,21 @@
+<div class='col-md-6'>
+
 <h1><%= @tournament.name %></h1>
 <h2>Add teams</h2>
 
-<%= form_for @tournament, url: {action: 'generate_schedule'} do |f| %>
-	<% 8.times do %>
-		<div class='add_team_div'>
-			Add new team: <%= text_field_tag :team_name, '', class: 'add_team_text' %>
-			<% unless @teams.blank? %>
-				or add previously created team: 
-				<%= select_tag 'team_select', options_from_collection_for_select(@teams, :id, :name), include_blank: true, class: 'add_team_select' %>
-			<% end %>
-	  	<%= f.hidden_field :team_ids, multiple: true, value: '-1', class: "add_team_hidden" %>
-	  </div>
-  <% end %>
-  <%= button_tag 'Save all teams', type: 'button', class: 'add_team_button' %>
-  <%= f.submit "Generate Schedule", class: 'add_team_submit', hidden: true %>
-<% end %>
+	<%= form_for @tournament, url: {action: 'generate_schedule'} do |f| %>
+		<p class="help-block">Type in new team names or select previously created teams</p>
+		<% 8.times do %>
+				<div class='add_team_div form-group form-inline'>
+					<%= text_field_tag :team_name, '', class: 'add_team_text form-control' %>
+				<% unless @teams.blank? %>
+					<%= select_tag 'team_select', options_from_collection_for_select(@teams, :id, :name), include_blank: true, class: 'add_team_select form-control' %>
+				<% end %>
+		  	<%= f.hidden_field :team_ids, multiple: true, value: '-1', class: "add_team_hidden" %>
+		  	</div>
+
+	  <% end %>
+	  <%= button_tag 'Save all teams', type: 'button', class: 'add_team_button btn btn-default' %>
+	  <%= f.submit "Generate Schedule", class: 'add_team_submit btn btn-default', hidden: true %>
+	<% end %>
+</div>

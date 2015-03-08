@@ -1,24 +1,28 @@
-<h1><%= @fixture[:player1] %> vs.	<%= @fixture[:player2] %></h1>
-<p>Start time: <%= @fixture[:time] %></p>
-<p><%= @fixture[:location] %></p>
-<p>Referee: <%= @fixture[:referee] %></p>
-<% if user_signed_in? && @fixture[:user_id] == current_user.id %>
-	<%= link_to "Edit details", edit_fixture_path(@fixture[:id]) %>
-<% end %>
-<p>Match <%= @fixture[:game_number] %> of <%= link_to @tournament.name, @tournament %></p>
-
-<% if @fixture[:completed] %>
-	<p>Final score: </p>
-	<p><%= @fixture[:player1] %> <%= @fixture[:player1_score] %> -
-		<%= @fixture[:player2_score] %> <%= @fixture[:player2] %></p>
-	<% if @fixture[:draw] %>
-		<p>The match ended in a draw.</p>
-	<% else %>
-		<p><%= @fixture[:winner] %> won.</p>
-	<% end %>
-<% elsif !(@fixture[:player1_id].blank? || @fixture[:player1_id].blank?) %>
+<div class='col-sm-6'>
+	<h1><%= @fixture[:player1] %> vs.	<%= @fixture[:player2] %></h1>
+	<p>Match <%= @fixture[:game_number] %> of <%= link_to @tournament.name, @tournament %></p>
+	<p>Start time: <%= @fixture[:time] %></p>
+	<p><%= @fixture[:location] %></p>
+	<p>Referee: <%= @fixture[:referee] %></p>
 	<% if user_signed_in? && @fixture[:user_id] == current_user.id %>
-		<%= link_to 'Add result for this match', enter_result_path(@fixture[:id]) %>
+		<%= link_to "Edit details", edit_fixture_path(@fixture[:id]) %><br>
 	<% end %>
-<% end %>
+
+	<br>
+
+	<% if @fixture[:completed] %>
+		<h4>Final score: </h4>
+		<h3 class='text-center'><%= @fixture[:player1] %> <%= @fixture[:player1_score] %> -
+			<%= @fixture[:player2_score] %> <%= @fixture[:player2] %></h3>
+		<% if @fixture[:draw] %>
+			<p class="text-muted text-center">The match ended in a draw.</p>
+		<% else %>
+			<p class="text-muted text-center"><%= @fixture[:winner] %> won.</p>
+		<% end %>
+	<% elsif !(@fixture[:player1_id].blank? || @fixture[:player1_id].blank?) %>
+		<% if user_signed_in? && @fixture[:user_id] == current_user.id %>
+			<%= link_to 'Add result for this match', enter_result_path(@fixture[:id]) %>
+		<% end %>
+	<% end %>
+</div>
 

@@ -1,23 +1,38 @@
 <h1>Create Tournament</h1>
 
-<%= form_for @tournament do |f| %>
-  <%= f.label :name, "Name" %>
-  <%= f.text_field :name %><br>
+<div class='col-md-6'>
+  <%= form_for @tournament do |f| %>
+    
+    <div class="form-group">
+      <%= f.label :name, "Name" %>
+      <%= f.text_field :name, class: "form-control" %>
+    </div>
 
-  <%= f.label :location, "Location" %>
-  <%= f.text_field :location %><br>
+    <div class="form-group">
+      <%= f.label :location, "Location" %>
+      <%= f.text_field :location, class: "form-control" %>
+    </div>
 
-  <%= f.label :organisation, "Organisation (optional)" %>
-  <%= f.text_field :organisation %><br>
-  
-  <%= f.label :activity_id, "Activity" %>
-  <%= f.select :activity_id, @activity_select_options %><br>
+    <div class="form-group">
+      <%= f.label :organisation, "Organisation (optional)" %>
+      <%= f.text_field :organisation, class: "form-control" %>
+    </div>
 
-  <%= f.label :format, "Type" %>
-  <%= f.select :format, ["Playoffs", "League", "League then Playoffs"] %><br>
+    <div class="form-group">
+      <%= f.label :activity_id, "Activity" %>
+      <%= f.select :activity_id, @activity_select_options, {}, {class: "form-control"} %>
+    </div>
 
-  <%= f.label :teams_in_playoffs, "Number of teams in playoffs" %>
-  <%= f.number_field :teams_in_playoffs %><br>
+    <div class="form-group">
+      <%= f.label :format, "Type" %>
+      <%= f.select :format, ["Playoffs", "League", "League then Playoffs"], {}, {class: "form-control"} %>
+    </div>
 
-  <%= f.submit "Next" %>
-<% end %>
+    <div id='choose_num_in_playoffs' class="form-group" hidden='true'>
+      <%= f.label :teams_in_playoffs, "Number of teams in playoffs" %>
+      <%= f.number_field :teams_in_playoffs, class: "form-control" %>
+    </div>
+
+    <%= f.submit "Next", class: 'btn btn-default' %>
+  <% end %>
+</div>

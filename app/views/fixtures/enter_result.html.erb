@@ -1,26 +1,38 @@
-<h1><%= @fixture[:player1] %> vs.	<%= @fixture[:player2] %></h1>
-<p>Start time: <%= @fixture[:time] %></p>
-<p>Match <%= @fixture[:game_number] %> of <%= link_to @tournament.name, @tournament %></p>
+<div class='col-md-6'>
 
-<% if @fixture[:player1_id].blank? || @fixture[:player1_id].blank? %>
-	<p>Result cannot be recorded yet as one or more of the players have not been specified</p>
-<% else %>
-	<%= form_for @fixture_record, url: {action: 'record_result'} do |f| %>
-		<%= f.label :player1_score, 'Score for ' + @fixture[:player1] %>
-		<%= f.number_field :player1_score %><br>
-		<%= f.label :player2_score, 'Score for ' + @fixture[:player2] %>
-		<%= f.number_field :player2_score %><br>
-		<% if @tournament.format == 'Playoffs' %>
-			<div id='tieBreaker' hidden=true>
-				<p>Playoff matches require a winner. Please select the result of any 
-					tie-breaker</p>
-				<%= f.label :winner_id, 'Result of tie-breaker' %>
-				<%= f.radio_button :winner_id, @fixture[:player1_id], checked: false %>
-				<%= f.label "winner_id_#{@fixture[:player1_id]}", @fixture[:player1] %>
-				<%= f.radio_button :winner_id, @fixture[:player2_id], checked: false %>
-				<%= f.label "winner_id_#{@fixture[:player2_id]}", @fixture[:player2] %>
+	<h1><%= @fixture[:player1] %> vs.	<%= @fixture[:player2] %></h1>
+	<p>Match <%= @fixture[:game_number] %> of <%= link_to @tournament.name, @tournament %></p>
+	<p>Start time: <%= @fixture[:time] %></p>
+
+
+	<% if @fixture[:player1_id].blank? || @fixture[:player1_id].blank? %>
+		<p>Result cannot be recorded yet as one or more of the players have not been specified</p>
+	<% else %>
+		<%= form_for @fixture_record, url: {action: 'record_result'} do |f| %>
+			<div class="form-group form-inline">
+				<%= f.label :player1_score, 'Score for ' + @fixture[:player1] %>
+				<%= f.number_field :player1_score, class: 'form-control' %>
 			</div>
+			<div class="form-group form-inline">
+				<%= f.label :player2_score, 'Score for ' + @fixture[:player2] %>
+				<%= f.number_field :player2_score, class: 'form-control' %>
+			</div>
+			<% if @tournament.format == 'Playoffs' %>
+				<div id='tieBreaker' hidden=true>
+					<p>Playoff matches require a winner. Please select the result of any 
+						tie-breaker</p>
+					<%= f.label :winner_id, 'Result of tie-breaker' %>
+					<div >
+						<%= f.radio_button :winner_id, @fixture[:player1_id], checked: false %>
+						<%= f.label "winner_id_#{@fixture[:player1_id]}", @fixture[:player1] %>
+					</div>
+					<div >
+						<%= f.radio_button :winner_id, @fixture[:player2_id], checked: false %>
+						<%= f.label "winner_id_#{@fixture[:player2_id]}", @fixture[:player2] %>
+					</div>
+				</div>
+			<% end %>
+			<%= f.submit 'Add Result', class: 'btn btn-default' %>
 		<% end %>
-		<%= f.submit 'Add Result' %>
 	<% end %>
-<% end %>
+</div>

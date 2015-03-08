@@ -1,36 +1,41 @@
-<h1><%= @fixture[:player1] %> vs.	<%= @fixture[:player2] %></h1>
+<div class='col-sm-6'>
 
-<p>Update details</p>
-<%= form_for @fixture_record do |f| %>
-	<%= f.label :start_time, "Start time" %>
-	<div class="container">
-	  <div class="row">
-	    <div class='col-sm-6'>
-				<%= f.text_field :start_time, value: @fixture[:time_for_input], class: "form-control", class: 'form-control datetimepicker1' %>
-		  </div>
+	<h1><%= @fixture[:player1] %> vs.	<%= @fixture[:player2] %></h1>
+	<p>Match <%= @fixture[:game_number] %> of <%= link_to @tournament.name, @tournament %></p>
+
+	<%= form_for @fixture_record do |f| %>
+		<div class="form-group">
+			<%= f.label :start_time, "Start time" %>
+			<%= f.text_field :start_time, value: @fixture[:time_for_input], class: "form-control", class: 'form-control datetimepicker1' %>
 		</div>
-	</div>
-	<%= f.label :location, "Location" %>
-	<%= f.text_field :location %><br>
 
-	<%= f.label :referee, "Referee" %>
-	<%= f.text_field :referee %><br>
+		<div class="form-group">
+			<%= f.label :location, "Location" %>
+			<%= f.text_field :location, class: "form-control" %>
+		</div>
+		<div class="form-group">
+			<%= f.label :referee, "Referee" %>
+			<%= f.text_field :referee, class: "form-control" %>
+		</div>
 
-  <%= f.submit "Update" %>
-<% end %>
-
- 
-<p>Match <%= @fixture[:game_number] %> of <%= link_to @tournament.name, @tournament %></p>
-
-<% if @fixture[:completed] %>
-	<p>Final score: </p>
-	<p><%= @fixture[:player1] %> <%= @fixture[:player1_score] %> -
-		<%= @fixture[:player2_score] %> <%= @fixture[:player2] %></p>
-	<% if @fixture[:draw] %>
-		<p>The match ended in a draw.</p>
-	<% else %>
-		<p><%= @fixture[:winner] %> won.</p>
+	  <%= f.submit "Update", class: 'btn btn-default' %>
 	<% end %>
-<% elsif !(@fixture[:player1_id].blank? || @fixture[:player1_id].blank?) %>
-	<p>Not yet played</p>
-<% end %>
+
+	<br>
+	<br>
+
+	<div>
+		<% if @fixture[:completed] %>
+			<p>Final score: </p>
+			<p><%= @fixture[:player1] %> <%= @fixture[:player1_score] %> -
+				<%= @fixture[:player2_score] %> <%= @fixture[:player2] %></p>
+			<% if @fixture[:draw] %>
+				<p>The match ended in a draw.</p>
+			<% else %>
+				<p><%= @fixture[:winner] %> won.</p>
+			<% end %>
+		<% elsif !(@fixture[:player1_id].blank? || @fixture[:player1_id].blank?) %>
+			<p>Not yet played</p>
+		<% end %>
+	</div>
+</div>

@@ -1,9 +1,10 @@
+<div class='col-sm-6'>
+
 <h1><%= @tournament.name %></h1>
-<h2>Details</h2>
 
-<p><%= @tournament.activity.name %></p>
+<p class='lead'><%= @tournament.location %></p>
 
-<p><%= @tournament.location %></p>
+<p class='lead'><%= @tournament.activity.name %></p>
 
 <% unless @tournament.organisation.blank? %>
 	<p>Organised by <%= @tournament.organisation %></p>
@@ -14,7 +15,7 @@
 <% if @tournament.format == "League" %>
 	<%= render 'layouts/league_table', standings: @standings %>
 <% elsif @tournament.format == "Playoffs" %>
-	<%= render 'layouts/playoff_chart', fixtures: @fixtures %>
+
 <% elsif @tournament.format == "League then Playoffs" %>
 	<%= render 'layouts/league_table', standings: @standings %>
 <% end %>
@@ -32,42 +33,51 @@
 	</p>
 <% end %>
 
-<% unless @fixtures.unplayed.blank? %>
-	<h2>Upcoming Matches</h2>
-	<% if user_signed_in? && @tournament.user_id == current_user.id %>
-		<p><%= link_to 'Update Schedule', update_schedule_path(@tournament) %></p>
+
+
+	<% unless @fixtures.unplayed.blank? %>
+		<h3>Upcoming Matches
+			<% if user_signed_in? && @tournament.user_id == current_user.id %>
+				<%= link_to 'Update Schedule', update_schedule_path(@tournament), class: "btn btn-default" %>
+			<% end %>
+		</h3>
 	<% end %>
-<% end %>
 
-<% @fixtures.unplayed.each do |round| %>
+	<% @fixtures.unplayed.each do |round| %>
 
-	Round <%= round[0] %>
-	<% round[1].each do |fixture| %>
-		<% if fixture[:bye] == true %>
-			<p><%= fixture[:player1] %> has a bye for round <%= fixture[:round] %></p>
-		<% else %>
-			<p><%= link_to "Match #{fixture[:game_number]}", fixture_path(fixture[:id]) %></p>
-			<p><%= fixture[:time] %></p>
-		  <p><%= fixture[:player1] %> vs.	<%= fixture[:player2] %></p>
+		<h4>Round <%= round[0] %></h4>
+		<% round[1].each do |fixture| %>
+			<div class='fixture_block'>
+				<% if fixture[:bye] == true %>
+					<p class='lead text-center'><%= fixture[:player1] %> has a bye for round <%= fixture[:round] %></p>
+				<% else %>
+					<p><%= link_to "Match #{fixture[:game_number]}", fixture_path(fixture[:id]) %>
+					 - <%= fixture[:time] %></p>
+				  <p class='lead text-center'><%= fixture[:player1] %> vs.	<%= fixture[:player2] %></p>
+				<% end %>
+			</div>
 		<% end %>
 	<% end %>
-<% end %>
 
-<% unless @fixtures.completed.blank? %>
-	<h2>Completed Matches</h2>
-<% end %>
+	<% unless @fixtures.completed.blank? %>
+		<h3>Completed Matches</h3>
+	<% end %>
 
-<% @fixtures.completed.each do |round| %>
+	<% @fixtures.completed.each do |round| %>
 
-	Round <%= round[0] %>
-	<% round[1].each do |fixture| %>
-		<% if fixture[:bye] == true %>
-			<p><%= fixture[:player1] %> had a bye for round <%= fixture[:round] %></p>
-		<% else %>
-			<p><%= link_to "Match #{fixture[:game_number]}", fixture_path(fixture[:id]) %></p>
-			<p><%= fixture[:time] %></p>
-			<p><%= fixture[:player1] %> <%= fixture[:player1_score] %> -
-				<%= fixture[:player2_score] %> <%= fixture[:player2] %></p>
+		<h4>Round <%= round[0] %></h4>
+		<div class='fixture_block'>
+		<% round[1].each do |fixture| %>
+				<% if fixture[:bye] == true %>
+					<p><%= fixture[:player1] %> had a bye for round <%= fixture[:round] %></p>
+				<% else %>
+					<p><%= link_to "Match #{fixture[:game_number]}", fixture_path(fixture[:id]) %></p>
+					<p><%= fixture[:time] %></p>
+					<p><%= fixture[:player1] %> <%= fixture[:player1_score] %> -
+						<%= fixture[:player2_score] %> <%= fixture[:player2] %></p>
+				<% end %>
+			</div>
 		<% end %>
 	<% end %>
-<% end %>
+
+</div>
