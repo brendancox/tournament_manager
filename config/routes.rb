@@ -15,6 +15,8 @@ Rails.application.routes.draw do
   get 'fixtures/:id/enter_result', to: 'fixtures#enter_result', as: 'enter_result'
   patch 'fixtures/:id/record_result', to: 'fixtures#record_result', as: 'record_result'
 
+  put 'add_team_json', to: 'teams#add_team_json', as: 'add_team_json'
+
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'
 

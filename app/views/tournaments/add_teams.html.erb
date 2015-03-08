@@ -2,6 +2,14 @@
 <h2>Add teams</h2>
 
 <%= form_for @tournament, url: {action: 'generate_schedule'} do |f| %>
-  <%= f.collection_check_boxes :team_ids, @teams, :id, :name %>
-  <%= f.submit "Generate Schedule" %>
+	<% 8.times do %>
+		<div class='add_team_div'>
+			Add new team: <%= text_field_tag :team_name, '', class: 'add_team_text' %>
+			or add previously created team: 
+			<%= select_tag 'team_select', options_from_collection_for_select(@teams, :id, :name), include_blank: true, class: 'add_team_select' %>
+	  	<%= f.hidden_field :team_ids, multiple: true, value: '-1', class: "add_team_hidden" %>
+	  </div>
+  <% end %>
+  <%= button_tag 'Save all teams', type: 'button', class: 'add_team_button' %>
+  <%= f.submit "Generate Schedule", class: 'add_team_submit', hidden: true %>
 <% end %>

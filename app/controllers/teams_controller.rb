@@ -17,6 +17,13 @@ class TeamsController < ApplicationController
   	@teams = Team.all
   end
 
+  def add_team_json
+    team = Team.create(name: params[:team][:name])
+    respond_to do |format|
+      format.json {render json: team.to_json(only: :id)}
+    end
+  end
+
   private
 
   def team_params

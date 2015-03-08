@@ -45,7 +45,7 @@ class TournamentsController < ApplicationController
     elsif tournament.format == "League then Playoffs"
       GenerateLeaguePlayoffSchedule.new(tournament).create
     end
-      
+
   	redirect_to tournament
   end
 
@@ -62,6 +62,8 @@ class TournamentsController < ApplicationController
 
   def add_team_params
   	params.require(:tournament).permit(:id, team_ids: [])
+    team_ids = params[:tournament][:team_ids]
+    team_ids.delete('-1')
+    {team_ids: team_ids}
   end
-
 end

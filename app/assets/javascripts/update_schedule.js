@@ -11,6 +11,6 @@ $(document).on('ready page:load', function(){
 			data: {fixture: {id: fixture_id, time: new_time}},
 			dataType: 'json', 
 			success: console.log('success')
-		})
-	})
+		});
+	});
 });

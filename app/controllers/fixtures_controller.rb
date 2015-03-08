@@ -85,7 +85,6 @@ class FixturesController < ApplicationController
 	end
 
 	def update_details
-    puts params[:fixture][:id]
     fixture = Fixture.find(params[:fixture][:id])
     fixture.start_time = params[:fixture][:time]
     fixture.save
