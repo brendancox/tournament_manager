@@ -36,6 +36,7 @@ $(document).on('ready page:load', function(){
 		});
 		$('.add_team_button').hide();
 		$('.add_team_submit').show();
+		$('.add_team_submit').removeClass('hidden');
 	});
 
 });
