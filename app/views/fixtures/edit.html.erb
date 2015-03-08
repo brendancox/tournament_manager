@@ -6,7 +6,7 @@
 	<div class="container">
 	  <div class="row">
 	    <div class='col-sm-6'>
-				<%= f.text_field :start_time, value: @fixture_record.start_time.strftime('%d-%b-%Y %H:%M'), class: "form-control", id: 'datetimepicker1' %>
+				<%= f.text_field :start_time, value: @fixture[:time_for_input], class: "form-control", class: 'form-control datetimepicker1' %>
 		  </div>
 		</div>
 	</div>
