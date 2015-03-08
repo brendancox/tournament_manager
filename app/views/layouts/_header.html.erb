@@ -1,5 +1,18 @@
 <nav class="navbar navbar-default">
-	<div class="navbar-header">
-		<a class="navbar-brand" href="/">ActivityWire</a>
+	<div class="container-fluid">
+		<div class="navbar-header">
+			<a class="navbar-brand" href="/">ActivityWire</a>
+		</div>
+		<p class="navbar-text"><%= notice %></p>
+		<p class="navbar-text"><%= alert %></p>
+		<ul class="nav navbar-nav navbar-right">
+		  <% if user_signed_in? %>
+		  	<li><p class="navbar-text"><%= current_user.email %></p></li>
+		    <li><%= link_to 'Logout', destroy_user_session_path, :method => :delete %></li>
+		  <% else %>
+		    <li><%= link_to 'Sign Up', new_user_registration_path %></li>
+		    <li><%= link_to 'Log In', new_user_session_path %></li>	
+		  <% end %>
+		</ul>
 	</div>
 </nav>
