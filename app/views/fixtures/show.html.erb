@@ -2,7 +2,9 @@
 <p>Start time: <%= @fixture[:time] %></p>
 <p><%= @fixture[:location] %></p>
 <p>Referee: <%= @fixture[:referee] %></p>
-<%= link_to "Edit details", edit_fixture_path(@fixture[:id]) %>
+<% if user_signed_in? && @fixture[:user_id] == current_user.id %>
+	<%= link_to "Edit details", edit_fixture_path(@fixture[:id]) %>
+<% end %>
 <p>Match <%= @fixture[:game_number] %> of <%= link_to @tournament.name, @tournament %></p>
 
 <% if @fixture[:completed] %>
@@ -15,6 +17,8 @@
 		<p><%= @fixture[:winner] %> won.</p>
 	<% end %>
 <% elsif !(@fixture[:player1_id].blank? || @fixture[:player1_id].blank?) %>
-	<%= link_to 'Add result for this match', enter_result_path(@fixture[:id]) %>
+	<% if user_signed_in? && @fixture[:user_id] == current_user.id %>
+		<%= link_to 'Add result for this match', enter_result_path(@fixture[:id]) %>
+	<% end %>
 <% end %>
 

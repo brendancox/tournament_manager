@@ -1,5 +1,7 @@
 class FixturesController < ApplicationController
 
+	before_action :authenticate_user!, except: :show
+
 	def show
 		fixture = Fixture.find(params[:id])
 		@tournament = Tournament.find(fixture.tournament_id)

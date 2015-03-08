@@ -142,6 +142,7 @@ class FixturesSet
 		@fixtures[index][:id] = fixture.id
 		@fixtures[index][:location] = fixture.location
 		@fixtures[index][:referee] = fixture.referee
+		@fixtures[index][:user_id] = fixture.tournament.user_id
 		unless fixture.league_round.blank?
 			@fixtures[index][:round] = fixture.league_round
 		end

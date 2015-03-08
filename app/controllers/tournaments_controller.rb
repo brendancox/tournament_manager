@@ -1,17 +1,19 @@
 class TournamentsController < ApplicationController
 
+  before_action :authenticate_user!, except: [:index, :show]
+
   def new
-  	@tournament = Tournament.new
+  	@tournament = current_user.tournaments.new
   	@activity_select_options = Activity.all.pluck(:name, :id)
   end
 
   def create
-  	tournament = Tournament.create(tournament_params)
+  	tournament = current_user.tournaments.create(tournament_params)
   	redirect_to add_teams_path(tournament)
   end
 
   def update
-  	tournament = Tournament.find(params[:id])
+  	tournament = current_user.tournaments.find(params[:id])
   	tournament.update(add_team_params)
   	redirect_to tournament
   end
@@ -30,12 +32,12 @@ class TournamentsController < ApplicationController
   end
 
   def add_teams
-  	@tournament = Tournament.find(params[:id])
-  	@teams = Team.all
+  	@tournament = current_user.tournaments.find(params[:id])
+  	@teams = current_user.teams.all
   end
 
   def generate_schedule
-  	tournament = Tournament.update(params[:id], add_team_params)
+  	tournament = current_user.tournaments.update(params[:id], add_team_params)
     if tournament.format == "Playoffs"
       schedule = GeneratePlayoffSchedule.new(tournament)
       schedule.create_empty
@@ -50,7 +52,7 @@ class TournamentsController < ApplicationController
   end
 
   def update_schedule
-    @tournament = Tournament.find(params[:id])
+    @tournament = current_user.tournaments.find(params[:id])
     @fixtures = FixturesSet.new(@tournament)
   end
 

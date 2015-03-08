@@ -8,4 +8,5 @@ class Tournament < ActiveRecord::Base
   validates :name, presence: true
   validates :activity_id, presence: true
   belongs_to :activity
+  belongs_to :user
 end

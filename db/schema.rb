@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150308042726) do
+ActiveRecord::Schema.define(version: 20150308052200) do
 
   create_table "activities", force: true do |t|
     t.string   "name"
@@ -80,7 +80,16 @@ ActiveRecord::Schema.define(version: 20150308042726) do
     t.string   "name"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "user_id"
   end
+
+  create_table "teams_users", force: true do |t|
+    t.integer "teams_id"
+    t.integer "users_id"
+  end
+
+  add_index "teams_users", ["teams_id"], name: "index_teams_users_on_teams_id"
+  add_index "teams_users", ["users_id"], name: "index_teams_users_on_users_id"
 
   create_table "tournaments", force: true do |t|
     t.string   "name"
@@ -93,6 +102,7 @@ ActiveRecord::Schema.define(version: 20150308042726) do
     t.integer  "teams_in_playoffs"
     t.string   "location"
     t.string   "organisation"
+    t.integer  "user_id"
   end
 
   create_table "users", force: true do |t|
@@ -112,5 +122,13 @@ ActiveRecord::Schema.define(version: 20150308042726) do
 
   add_index "users", ["email"], name: "index_users_on_email", unique: true
   add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
+
+  create_table "users_teams", force: true do |t|
+    t.integer "users_id"
+    t.integer "teams_id"
+  end
+
+  add_index "users_teams", ["teams_id"], name: "index_users_teams_on_teams_id"
+  add_index "users_teams", ["users_id"], name: "index_users_teams_on_users_id"
 
 end

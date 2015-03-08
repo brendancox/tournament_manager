@@ -1,5 +1,7 @@
 class TeamsController < ApplicationController
 
+  before_action :authenticate_user!
+
   def new
   	@team = Team.new
   end
@@ -18,7 +20,7 @@ class TeamsController < ApplicationController
   end
 
   def add_team_json
-    team = Team.create(name: params[:team][:name])
+    team = current_user.teams.create(name: params[:team][:name])
     respond_to do |format|
       format.json {render json: team.to_json(only: :id)}
     end

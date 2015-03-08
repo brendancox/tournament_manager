@@ -34,7 +34,9 @@
 
 <% unless @fixtures.unplayed.blank? %>
 	<h2>Upcoming Matches</h2>
-	<p><%= link_to 'Update Schedule', update_schedule_path(@tournament) %></p>
+	<% if user_signed_in? && @tournament.user_id == current_user.id %>
+		<p><%= link_to 'Update Schedule', update_schedule_path(@tournament) %></p>
+	<% end %>
 <% end %>
 
 <% @fixtures.unplayed.each do |round| %>
