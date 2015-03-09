@@ -48,17 +48,22 @@ class GeneratePlayoffSchedule
           new_fixture = generate_next_fixture(first_game_start_time)
           new_fixture.save
           if @current_round > 1
+            puts '---'
+            puts 2*i
             update_preceding_with_next_playoff_id(preceding_round_fixtures[2*i], new_fixture, 1)
-            update_preceding_with_next_playoff_id(preceding_round_fixtures[2*i+1], new_fixture, 2)
+            if (2*i+1) < preceding_round_fixtures.count
+              puts 2*i+1
+              update_preceding_with_next_playoff_id(preceding_round_fixtures[2*i+1], new_fixture, 2)
+            end
             i += 1
           end
           @remaining_teams -= 1
           remaining_teams_this_round -= 2
         end
-        if remaining_teams_this_round == 1
-          new_fixture = generate_playoff_bye
-          new_fixture.save
-        end
+        #if remaining_teams_this_round == 1
+        #  new_fixture = generate_playoff_bye
+        #  new_fixture.save
+        #end
       else  #subround and following round are created
         games_this_round = num_of_subround_games(@remaining_teams, round_pre_sub)
         unless games_this_round == 0
@@ -66,23 +71,35 @@ class GeneratePlayoffSchedule
             new_fixture = generate_next_fixture(first_game_start_time)
             new_fixture.save
             if @current_round > 1
+              puts '---'
+              puts 2*i
               update_preceding_with_next_playoff_id(preceding_round_fixtures[2*i], new_fixture, 1)
-              update_preceding_with_next_playoff_id(preceding_round_fixtures[2*i+1], new_fixture, 2)
+              if (2*i+1) < preceding_round_fixtures.count
+                puts 2*i+1
+                update_preceding_with_next_playoff_id(preceding_round_fixtures[2*i+1], new_fixture, 2)
+              end
               i += 1
             end
             @remaining_teams -= 1
             games_this_round -= 1 
           end
+          preceding_round_fixtures.concat(@tournament.fixtures.where(playoff_round: @current_round).pluck(:id))
           @current_round += 1
         end
-        preceding_round_fixtures.concat(@tournament.fixtures.where(playoff_round: @current_round-1).pluck(:id))
+        puts 'preceding_round_fixtures'
+        puts preceding_round_fixtures
         remaining_teams_this_round = @remaining_teams
         while remaining_teams_this_round > 1
           new_fixture = generate_next_fixture(first_game_start_time)
           new_fixture.save
           if @current_round > 1
+            puts '---'
+            puts 2*i
             update_preceding_with_next_playoff_id(preceding_round_fixtures[2*i], new_fixture, 1)
-            update_preceding_with_next_playoff_id(preceding_round_fixtures[2*i+1], new_fixture, 2)
+            if (2*i+1) < preceding_round_fixtures.count
+              puts 2*i+1
+              update_preceding_with_next_playoff_id(preceding_round_fixtures[2*i+1], new_fixture, 2)
+            end
             i += 1
           end
           @remaining_teams -= 1
