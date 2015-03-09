@@ -16,6 +16,16 @@ $(document).on('ready page:load', function(){
 		}
 	});
 
+	$('.new_add_team_field').click(function(event){
+		event.preventDefault();
+		var newDiv = $('.add_team_div:last').clone();
+		$('.add_team_div').last().after(newDiv);
+		createdDiv = $('.add_team_div').last();
+		createdDiv.find('.add_team_text').val('');
+		createdDiv.find(".add_team_select option[value='']").attr('selected', true);
+		createdDiv.find('.add_team_hidden').val(-1);
+	})
+
 	$('.add_team_button').click(function(event){
 		$('.add_team_div').each(function(){
 			parent_div = $(this);
