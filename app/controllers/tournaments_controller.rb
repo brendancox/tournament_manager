@@ -8,8 +8,13 @@ class TournamentsController < ApplicationController
   end
 
   def create
-  	tournament = current_user.tournaments.create(tournament_params)
-  	redirect_to add_teams_path(tournament)
+     
+    tournament = current_user.tournaments.create(tournament_params)
+    if tournament.valid?
+  	  redirect_to add_teams_path(tournament)
+    else
+      redirect_to new_tournament_path
+    end
   end
 
   def update
@@ -37,18 +42,23 @@ class TournamentsController < ApplicationController
   end
 
   def generate_schedule
-  	tournament = current_user.tournaments.update(params[:id], add_team_params)
-    if tournament.format == "Playoffs"
-      schedule = GeneratePlayoffSchedule.new(tournament)
-      schedule.create_empty
-      schedule.assign_teams
-    elsif tournament.format == "League"
-      GenerateLeagueSchedule.new(tournament).create
-    elsif tournament.format == "League then Playoffs"
-      GenerateLeaguePlayoffSchedule.new(tournament).create
-    end
-
-  	redirect_to tournament
+    tournament = current_user.tournaments.find(params[:id])
+    puts add_team_params[:team_ids].count
+    if add_team_params[:team_ids].count < 2
+      redirect_to add_teams_path(tournament)
+    else
+    	tournament.update(add_team_params)
+      if tournament.format == "Playoffs"
+        schedule = GeneratePlayoffSchedule.new(tournament)
+        schedule.create_empty
+        schedule.assign_teams
+      elsif tournament.format == "League"
+        GenerateLeagueSchedule.new(tournament).create
+      elsif tournament.format == "League then Playoffs"
+        GenerateLeaguePlayoffSchedule.new(tournament).create
+      end
+      redirect_to tournament
+    end	
   end
 
   def update_schedule
@@ -65,6 +75,7 @@ class TournamentsController < ApplicationController
   def add_team_params
   	params.require(:tournament).permit(:id, team_ids: [])
     team_ids = params[:tournament][:team_ids]
+    team_ids.uniq!
     team_ids.delete('-1')
     {team_ids: team_ids}
   end
