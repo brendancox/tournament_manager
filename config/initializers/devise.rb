@@ -6,6 +6,9 @@ Devise.setup do |config|
   # confirmation, reset password and unlock tokens in the database.
   # config.secret_key = 'bd286463b249c26354bb86f0d4941150f6023193174352f3d04b041bbcd8e9cfa234da4d3fc1ade23018d389554f927a6a13c59fbd616611e63147f8beba679f'
 
+  # Work around with unicorn server not accepting config.secret_key = Rails.application.secrets.devise_secret_key
+  config.secret_key = File.read(File.dirname(__FILE__) + '/devise_key.rb')
+
   # ==> Mailer Configuration
   # Configure the e-mail address which will be shown in Devise::Mailer,
   # note that it will be overwritten if you use your own mailer class
