@@ -19,7 +19,7 @@
 		<% else %>
 			<p class="text-muted text-center"><%= @fixture[:winner] %> won.</p>
 		<% end %>
-	<% elsif !(@fixture[:player1_id].blank? || @fixture[:player1_id].blank?) %>
+	<% elsif !(@fixture[:player1_id].blank? || @fixture[:player2_id].blank?) %>
 		<% if user_signed_in? && @fixture[:user_id] == current_user.id %>
 			<%= link_to 'Add result for this match', enter_result_path(@fixture[:id]) %>
 		<% end %>

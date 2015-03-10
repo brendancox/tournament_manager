@@ -66,8 +66,8 @@
 	<% @fixtures.completed.each do |round| %>
 
 		<h4>Round <%= round[0] %></h4>
-		<div class='fixture_block'>
 		<% round[1].each do |fixture| %>
+			<div class='fixture_block'>
 				<% if fixture[:bye] == true %>
 					<p><%= fixture[:player1] %> had a bye for round <%= fixture[:round] %></p>
 				<% else %>
@@ -75,7 +75,7 @@
 					<p><%= fixture[:time] %></p>
 					<p><%= fixture[:player1] %> <%= fixture[:player1_score] %> -
 						<%= fixture[:player2_score] %> <%= fixture[:player2] %></p>
-				<% end %>
+				<% end %>	
 			</div>
 		<% end %>
 	<% end %>
