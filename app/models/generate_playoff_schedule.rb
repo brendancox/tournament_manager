@@ -1,7 +1,6 @@
 class GeneratePlayoffSchedule
   
   # To refactor create_empty -> separate into methods
-  # Testing Git Pull on server
 
   def initialize(tournament)
   	@tournament = tournament
