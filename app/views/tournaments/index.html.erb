@@ -7,6 +7,9 @@
 			<td><%= link_to tournament.name, tournament %></td>
 			<td><%= tournament.activity.name %></td>
 			<td><%= tournament.location %></td>
+			<% if admin_signed_in? %>
+				<td><span id='delete_tournament_<%= tournament.id %>'><%= link_to "delete (admin only)", tournament, method: :delete, remote: true %></span></td>
+			<% end %>
 		</tr>
 	<% end %>
 

@@ -1,5 +1,9 @@
 <div class='col-sm-6'>
 
+	<% if admin_signed_in? %>
+		<%= link_to 'Delete tournament (admin only)', tournament_path, method: :delete %>
+	<% end %>
+
 <h1><%= @tournament.name %></h1>
 
 <p class='lead'><%= @tournament.location %></p>

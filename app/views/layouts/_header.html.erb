@@ -6,6 +6,9 @@
 		<p class="navbar-text"><%= notice %></p>
 		<p class="navbar-text"><%= alert %></p>
 		<ul class="nav navbar-nav navbar-right">
+			<% if admin_signed_in? %>
+				<li><p class="navbar-text">ADMINISTRATOR SIGNED IN (<%= current_admin.email %>) - <%= link_to 'Logout', destroy_admin_session_path, :method => :delete %></p></li>
+			<% end %>
 		  <% if user_signed_in? %>
 		  	<li><p class="navbar-text"><%= current_user.email %></p></li>
 		    <li><%= link_to 'Logout', destroy_user_session_path, :method => :delete %></li>

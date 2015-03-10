@@ -1,6 +1,7 @@
 class TournamentsController < ApplicationController
 
-  before_action :authenticate_user!, except: [:index, :show]
+  before_action :authenticate_user!, except: [:index, :show, :destroy]
+  before_action :authenticate_admin!, only: [:destroy]
 
   def new
   	@tournament = current_user.tournaments.new
@@ -34,6 +35,15 @@ class TournamentsController < ApplicationController
 
   def index
   	@tournaments = Tournament.all
+  end
+
+  def destroy
+    @tournament = Tournament.find(params[:id])
+    @tournament.destroy
+    respond_to do |format|
+      format.js { render :layout => false }
+      format.html {redirect_to root_path}
+    end
   end
 
   def add_teams
