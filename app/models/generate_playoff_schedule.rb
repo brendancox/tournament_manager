@@ -1,5 +1,7 @@
 class GeneratePlayoffSchedule
   
+  # To refactor create_empty -> separate into methods
+
   def initialize(tournament)
   	@tournament = tournament
   end
