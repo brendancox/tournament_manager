@@ -91,14 +91,14 @@ describe "generate playoff schedules" do
 
 	end
 
-	context "full schedule - with 17 teams" do
+	context "full schedule - with larger number of teams" do
 		before do
 			# load_playoff_numbers is in support/correct_numbers.rb.  This contains relevant number
 			# of games each round given a certain number of teams in the playoffs, as worked out
 			# indepedently from the code. 
 			# Format is num_of_games[number_of_teams][playoff_round]
 			@num_of_games = load_playoff_numbers
-			@num_of_teams = 17
+			@num_of_teams = 19
 			(@num_of_teams - 4).times {create(:extra_teams)}
 			tournament = Tournament.first
 			tournament.update(team_ids: (1..@num_of_teams).to_a)

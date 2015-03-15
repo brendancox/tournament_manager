@@ -1,13 +1,13 @@
 $(document).on('ready page:load', function(){
 
-	$('.add_team_select').change(function(){
+	$('form').on('change', '.add_team_select', function(){
 		this_select = $(this);
 		parent_div = this_select.parent();
 		parent_div.find('.add_team_hidden').val(this_select.val());
 		parent_div.find('.add_team_text').val(parent_div.find('.add_team_select option:selected').text());
 	});
 
-	$('.add_team_text').change(function(){
+	$('form').on('change', '.add_team_text', function(){
 		parent_div = $(this).parent();
 		if ((parent_div.find('.add_team_hidden').val()) !== '-1')
 		{
