@@ -1,24 +1,7 @@
 class GeneratePlayoffSchedule
-  
-  # To refactor create_empty -> separate into methods
 
   def initialize(tournament)
   	@tournament = tournament
-  end
-
-  def create
-  	#TO ADD: check for existing fixtures for this tournament
-
-    determine_rounds
-    @game_number = 1
-    generate_first_round_fixtures
-    #calc num of games in subround. check odd_number_var. create fixtures for subround, if any.
-    generate_subround_fixtures
-    generate_fixtures_following_subround
-
-    while @current_round <= @rounds
-      generate_remaining_fixtures
-    end
   end
 
   def create_empty(number_of_teams = 0, first_game_number = 1, round_pre_sub = 1)
@@ -30,8 +13,8 @@ class GeneratePlayoffSchedule
       @remaining_teams = number_of_teams
     end
     first_game_start_time = Time.new.change(hour: 18) + 1.day
-    # To remove determine_rounds and alter games_in_subround, keeping for now to focus on
-    # other functionality.  
+
+    # check if number of teams is 2^x (e.g. number of teams = 2, 4, 8, 16, etc) 
     if (Math.log2(@remaining_teams) - Math.log2(@remaining_teams).floor) > 0
       subround_required = true
     else
@@ -45,16 +28,15 @@ class GeneratePlayoffSchedule
       end
       i = 0
       unless subround_required && (@current_round == (round_pre_sub + 1))
+        #create a round with no byes and doesn't need to take byes into account
+
         remaining_teams_this_round = @remaining_teams
         while remaining_teams_this_round > 1
           new_fixture = generate_next_fixture(first_game_start_time)
           new_fixture.save
           if @current_round > 1
-            puts '---'
-            puts 2*i
             update_preceding_with_next_playoff_id(preceding_round_fixtures[2*i], new_fixture, 1)
             if (2*i+1) < preceding_round_fixtures.count
-              puts 2*i+1
               update_preceding_with_next_playoff_id(preceding_round_fixtures[2*i+1], new_fixture, 2)
             end
             i += 1
@@ -62,22 +44,15 @@ class GeneratePlayoffSchedule
           @remaining_teams -= 1
           remaining_teams_this_round -= 2
         end
-        #if remaining_teams_this_round == 1
-        #  new_fixture = generate_playoff_bye
-        #  new_fixture.save
-        #end
-      else  #subround and following round are created
+      else  #subround (round with byes) and following round are created
         games_this_round = num_of_subround_games(@remaining_teams, round_pre_sub)
         unless games_this_round == 0
           while games_this_round > 0
             new_fixture = generate_next_fixture(first_game_start_time)
             new_fixture.save
             if @current_round > 1
-              puts '---'
-              puts 2*i
               update_preceding_with_next_playoff_id(preceding_round_fixtures[2*i], new_fixture, 1)
               if (2*i+1) < preceding_round_fixtures.count
-                puts 2*i+1
                 update_preceding_with_next_playoff_id(preceding_round_fixtures[2*i+1], new_fixture, 2)
               end
               i += 1
@@ -88,18 +63,13 @@ class GeneratePlayoffSchedule
           preceding_round_fixtures.concat(@tournament.fixtures.where(playoff_round: @current_round).pluck(:id))
           @current_round += 1
         end
-        puts 'preceding_round_fixtures'
-        puts preceding_round_fixtures
         remaining_teams_this_round = @remaining_teams
         while remaining_teams_this_round > 1
           new_fixture = generate_next_fixture(first_game_start_time)
           new_fixture.save
           if @current_round > 1
-            puts '---'
-            puts 2*i
             update_preceding_with_next_playoff_id(preceding_round_fixtures[2*i], new_fixture, 1)
             if (2*i+1) < preceding_round_fixtures.count
-              puts 2*i+1
               update_preceding_with_next_playoff_id(preceding_round_fixtures[2*i+1], new_fixture, 2)
             end
             i += 1
@@ -179,6 +149,21 @@ end
 
 
   # OLD METHODS
+
+  def create
+    #TO ADD: check for existing fixtures for this tournament
+
+    determine_rounds
+    @game_number = 1
+    generate_first_round_fixtures
+    #calc num of games in subround. check odd_number_var. create fixtures for subround, if any.
+    generate_subround_fixtures
+    generate_fixtures_following_subround
+
+    while @current_round <= @rounds
+      generate_remaining_fixtures
+    end
+  end
 
   def determine_rounds
     #work out number of rounds

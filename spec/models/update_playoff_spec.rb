@@ -7,7 +7,8 @@ describe "update rest of tournament" do
 			@tournament = Tournament.first
 			@tournament.update(team_ids: [1, 2, 3, 4])
 			schedule = GeneratePlayoffSchedule.new(@tournament)
-    	schedule.create
+    	schedule.create_empty
+    	schedule.assign_teams
 		end
 
 		it "adds winning player ids to 2nd round game" do
@@ -27,7 +28,8 @@ describe "update rest of tournament" do
 			@tournament = Tournament.first
 			@tournament.update(team_ids: [1, 2])
 			schedule = GeneratePlayoffSchedule.new(@tournament)
-    	schedule.create
+    	schedule.create_empty
+    	schedule.assign_teams
     	fixture = Fixture.first
 			fixture.winner_id = fixture.player1_id
 			fixture.completed = true

@@ -6,7 +6,8 @@ describe "Fixtures Set" do
 		tournament = Tournament.first
 		tournament.update(team_ids: [1, 2, 3, 4])
 		schedule = GeneratePlayoffSchedule.new(tournament)
-    schedule.create
+    schedule.create_empty
+    schedule.assign_teams
 	end
 
 	it "should return an array" do
