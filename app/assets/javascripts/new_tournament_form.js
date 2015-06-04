@@ -8,5 +8,19 @@ $(document).on('ready page:load', function(){
 		{
 			$('#choose_num_in_playoffs').hide();
 		}
-	})
+	});
+	$('.requiredFieldsButton').click(function(e){
+		var requiredNotComplete = false;
+		$('.required').each(function(){
+			if ($(this).val() === ''){
+				$(this).css('border-color', 'red');
+				$('.required-fields-message').show();
+				requiredNotComplete = true;
+			}
+		});
+		if (requiredNotComplete){
+			e.preventDefault();
+			return false;
+		}
+	});
 });

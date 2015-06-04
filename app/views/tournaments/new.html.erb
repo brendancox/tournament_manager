@@ -4,13 +4,13 @@
   <%= form_for @tournament do |f| %>
     
     <div class="form-group">
-      <%= f.label :name, "Name" %>
-      <%= f.text_field :name, class: "form-control" %>
+      <%= f.label :name, "Name (required)" %>
+      <%= f.text_field :name, class: "form-control required" %>
     </div>
 
     <div class="form-group">
-      <%= f.label :location, "Location" %>
-      <%= f.text_field :location, class: "form-control" %>
+      <%= f.label :location, "Location (required)" %>
+      <%= f.text_field :location, class: "form-control required" %>
     </div>
 
     <div class="form-group">
@@ -33,6 +33,10 @@
       <%= f.number_field :teams_in_playoffs, class: "form-control" %>
     </div>
 
-    <%= f.submit "Next", class: 'btn btn-default' %>
+    <div class='required-fields-message'>
+      <p>Please complete required fields</p>
+    </div>
+
+    <%= f.submit "Next", class: 'btn btn-default requiredFieldsButton' %>
   <% end %>
 </div>
