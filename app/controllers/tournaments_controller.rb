@@ -3,13 +3,16 @@ class TournamentsController < ApplicationController
   before_action :authenticate_user!, except: [:index, :show, :destroy]
   before_action :authenticate_admin!, only: [:destroy]
 
+  def index
+    @tournaments = Tournament.all
+  end
+
   def new
   	@tournament = current_user.tournaments.new
   	@activity_select_options = Activity.all.pluck(:name, :id)
   end
 
   def create
-     
     tournament = current_user.tournaments.create(tournament_params)
     if tournament.valid?
   	  redirect_to add_teams_path(tournament)
@@ -18,10 +21,37 @@ class TournamentsController < ApplicationController
     end
   end
 
+  def add_teams
+    @tournament = current_user.tournaments.find(params[:id])
+    @teams = current_user.teams.all
+  end
+
   def update
   	tournament = current_user.tournaments.find(params[:id])
   	tournament.update(add_team_params)
   	redirect_to tournament
+  end
+
+  def schedule_rules
+  end
+
+  def generate_schedule
+    tournament = current_user.tournaments.find(params[:id])
+    if add_team_params[:team_ids].count < 2
+      redirect_to add_teams_path(tournament)
+    else
+      tournament.update(add_team_params)
+      if tournament.format == "Playoffs"
+        schedule = GeneratePlayoffSchedule.new(tournament)
+        schedule.create_empty
+        schedule.assign_teams
+      elsif tournament.format == "League"
+        GenerateLeagueSchedule.new(tournament).create
+      elsif tournament.format == "League then Playoffs"
+        GenerateLeaguePlayoffSchedule.new(tournament).create
+      end
+      redirect_to tournament
+    end 
   end
 
   def show
@@ -33,8 +63,9 @@ class TournamentsController < ApplicationController
     end
   end
 
-  def index
-  	@tournaments = Tournament.all
+  def update_schedule
+    @tournament = current_user.tournaments.find(params[:id])
+    @fixtures = FixturesSet.new(@tournament)
   end
 
   def destroy
@@ -44,35 +75,6 @@ class TournamentsController < ApplicationController
       format.js { render :layout => false }
       format.html {redirect_to root_path}
     end
-  end
-
-  def add_teams
-  	@tournament = current_user.tournaments.find(params[:id])
-  	@teams = current_user.teams.all
-  end
-
-  def generate_schedule
-    tournament = current_user.tournaments.find(params[:id])
-    if add_team_params[:team_ids].count < 2
-      redirect_to add_teams_path(tournament)
-    else
-    	tournament.update(add_team_params)
-      if tournament.format == "Playoffs"
-        schedule = GeneratePlayoffSchedule.new(tournament)
-        schedule.create_empty
-        schedule.assign_teams
-      elsif tournament.format == "League"
-        GenerateLeagueSchedule.new(tournament).create
-      elsif tournament.format == "League then Playoffs"
-        GenerateLeaguePlayoffSchedule.new(tournament).create
-      end
-      redirect_to tournament
-    end	
-  end
-
-  def update_schedule
-    @tournament = current_user.tournaments.find(params[:id])
-    @fixtures = FixturesSet.new(@tournament)
   end
 
   private

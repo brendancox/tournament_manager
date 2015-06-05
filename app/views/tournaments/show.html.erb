@@ -57,7 +57,9 @@
 				<% else %>
 					<p><%= link_to "Match #{fixture[:game_number]}", fixture_path(fixture[:id]) %>
 					 - <%= fixture[:time] %></p>
-				  <p class='lead text-center'><%= fixture[:player1] %> vs.	<%= fixture[:player2] %></p>
+					<div class="sortable">
+				  	<p class='lead text-center' ><%= fixture[:player1] %> vs.	<%= fixture[:player2] %></p>
+				  </div>
 				<% end %>
 			</div>
 		<% end %>
@@ -85,3 +87,9 @@
 	<% end %>
 
 </div>
+
+<div class="col-sm-3">
+	<div class="sortable holderList">
+	</div>
+</div>
+
