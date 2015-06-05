@@ -53,14 +53,10 @@ class TournamentsController < ApplicationController
 
   def generate_schedule
     tournament = current_user.tournaments.find(params[:id])
-    teams = Team.find(add_team_params[:team_ids])
-    teams.each do |team|
-      puts team.name
-    end
     if add_team_params[:team_ids].count < 2
       redirect_to add_teams_path(tournament)
     else
-    	tournament.teams = teams
+    	tournament.update(add_team_params)
       if tournament.format == "Playoffs"
         schedule = GeneratePlayoffSchedule.new(tournament)
         schedule.create_empty
