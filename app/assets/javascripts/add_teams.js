@@ -27,26 +27,28 @@ $(document).on('ready page:load', function(){
 	})
 
 	$('.add_team_button').click(function(event){
+		$('.add_team_button').hide();
+		var teams_array = [];
+		tourn_id = $('.edit_tournament').attr('id')[16];
 		$('.add_team_div').each(function(){
 			parent_div = $(this);
-			if (((parent_div.find('.add_team_hidden').val()) === '-1') && ((parent_div.find('.add_team_text').val()) !== ""))
+			if (((parent_div.find('.add_team_text').val()) !== ""))
 			{
-				team_name = parent_div.find('.add_team_text').val();
-				$.ajax({
-					type:'put',
-					url: '/add_team_json',
-					data: {team: {name: team_name}},
-					dataType: 'json',
-					async: false,
-					success: function(json){
-						parent_div.find('.add_team_hidden').val(json.id);
-					}
-				});
+				var team_name = parent_div.find('.add_team_text').val();
+				var team_id = parent_div.find('.add_team_hidden').val();
+				teams_array.push({name: team_name, id: team_id});
+			}
+
+		});
+		$.ajax({
+			type:'patch',
+			url: 'generate_schedule',
+			data: {team: teams_array},
+			dataType: 'json',
+			async: false,
+			success: function(json){
 			}
 		});
-		$('.add_team_button').hide();
-		$('.add_team_submit').show();
-		$('.add_team_submit').removeClass('hidden');
 	});
 
 });

@@ -36,11 +36,22 @@ class TournamentsController < ApplicationController
   end
 
   def generate_schedule
+    team_names = params[:tournament][:team_names]
+    team_ids = params[:tournament][:team_ids]
+    team_names.each_with_index do |team_name, index|
+      if (team_name != '') && (team_ids[index] == '-1')
+        new_team = current_user.teams.create(name: team_name)
+        team_ids[index] = new_team.id
+      end
+    end
+    team_ids = reduce(team_ids)
+    puts team_ids
+    puts team_ids[:team_ids].count
     tournament = current_user.tournaments.find(params[:id])
-    if add_team_params[:team_ids].count < 2
+    if team_ids[:team_ids].count < 2
       redirect_to add_teams_path(tournament)
     else
-      tournament.update(add_team_params)
+      tournament.update(team_ids)
       if tournament.format == "Playoffs"
         schedule = GeneratePlayoffSchedule.new(tournament)
         schedule.create_empty
@@ -84,8 +95,27 @@ class TournamentsController < ApplicationController
   end
 
   def add_team_params
-  	params.require(:tournament).permit(:id, team_ids: [])
+  	params.require(:tournament).permit(:id, team_ids: [], team_names: [])
     team_ids = params[:tournament][:team_ids]
+    team_ids.uniq!
+    team_ids.delete('-1')
+    {team_ids: team_ids}
+  end
+
+  def team_params
+    params.require(:team).permit(:id, :name)
+  end
+
+  def to_ids(teams)
+    team_ids_array = Array.new
+    teams.each do |team|
+      team_ids_array.push(team[:id])
+    end
+    team_ids_array.uniq!
+    {team_ids: team_ids_array}
+  end
+
+  def reduce(team_ids)
     team_ids.uniq!
     team_ids.delete('-1')
     {team_ids: team_ids}

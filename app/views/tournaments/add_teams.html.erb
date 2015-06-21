@@ -7,7 +7,7 @@
 		<p class="help-block">Type in new team names or select previously created teams</p>
 		<% 8.times do %>
 				<div class='add_team_div form-group form-inline'>
-					<%= text_field_tag :team_name, '', class: 'add_team_text form-control' %>
+					<%= text_field_tag :team_names, '', class: 'add_team_text form-control', name: 'tournament[team_names][]' %>
 				<% unless @teams.blank? %>
 					<%= select_tag 'team_select', options_from_collection_for_select(@teams, :id, :name), include_blank: true, class: 'add_team_select form-control' %>
 				<% end %>
@@ -17,7 +17,6 @@
 	  <% end %>
 
 	  <a href='#' class='new_add_team_field'>Click for another field</a><br>
-	  <%= button_tag 'Save all teams', type: 'button', class: 'add_team_button btn btn-default' %>
-	  <%= f.submit "Generate Schedule", class: 'add_team_submit btn btn-default hidden', hidden: true %>
+	  <%= submit_tag 'Save all teams', class: 'btn btn-default' %>
 	<% end %>
 </div>
